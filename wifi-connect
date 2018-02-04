@@ -4,8 +4,8 @@ if [ -z "$networkCard" ];then
     echo "Set up network card"
     exit 1
 fi
-
-essid="$(iwlist "$networkCard" scan | grep ESSID | sed -e "s/ESSID://" -e "s/\ //g" -e "s/\"//g" | peco)"
+sudo echo ""
+essid="$(sudo iwlist "$networkCard" scan | grep ESSID | sed -e "s/ESSID://" -e "s/\ //g" -e "s/\"//g" | peco)"
 if [ -z "$essid" ];then
     exit 1
 fi
