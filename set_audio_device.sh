@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+# If olasonic speaker exists, then set it to default audio device
 if [ "$(pacmd list-sinks | grep -A 1 "\*\ index" | grep "name" | sed -e s/'\t'//g)" != "name: <alsa_output.pci-0000_00_1b.0.analog-stereo>" ]; then
     pacmd set-default-sink alsa_output.pci-0000_00_1b.0.analog-stereo
     echo "Switch to speaker"
