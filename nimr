@@ -1,5 +1,5 @@
 #!/bin/bash
 # Delete executable file and nimcache after nim c -r
 nimcache="/tmp/nimcahce"
-nim c -r --verbosity:0 --hints:off --nimcache:"$nimcache" "$1" \
-    rm -r "${1//.nim/}" "$nimcache" >/dev/null 2>&1
+nim c -r --verbosity:0 --hints:off --nimcache:"$nimcache" "$1"
+rm -r "${1//.nim/}" "$nimcache" >/dev/null 2>&1
