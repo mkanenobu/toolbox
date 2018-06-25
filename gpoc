@@ -5,8 +5,8 @@ gpoc(){
     current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
     echo "Push to $current_branch"
     if [[ "$current_branch" =~ (master|release) ]]; then
-        read -rp "Are you sure?:" confirm
-        if [[ "$confirm" =~ (y|yes) ]]; then
+        read -rp "Are you sure?(y/N):" confirm
+        if [[ "$confirm" =~ (y|yes|Yes) ]]; then
             git push origin "$current_branch"
         else
             echo ""
