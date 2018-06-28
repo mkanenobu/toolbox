@@ -1,6 +1,5 @@
 #!/bin/bash
-## git push origin {current branch}
-
+## git push origin current branch
 gpoc(){
     current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
     echo "Push to $current_branch"
@@ -16,4 +15,4 @@ gpoc(){
     fi
 }
 
-
+gpoc

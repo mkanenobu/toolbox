@@ -1,5 +1,5 @@
 #!/bin/bash
 source_file="$1"
-nim c --verbosity:0 --hints:off "$source_file"
-./"$(sed -e s/.nim//g "$source_file")" "${@:2}"
-rm -r nimcache 
+nim c -r --verbosity:0 --hints:off "$source_file"
+rm "${source_file/.nim/}"
+rm -r ./nimcache
