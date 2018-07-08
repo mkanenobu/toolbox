@@ -1,0 +1,6 @@
+#!/bin/bash
+# free pascal compie and run
+
+fpc "$1"
+excutable="$(echo "$1" | sed -e "s/\.pas//")"
+$excutable
