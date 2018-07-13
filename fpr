@@ -1,6 +1,17 @@
 #!/bin/bash
 # free pascal compie and run
 
-fpc "$1"
 excutable="$(echo "$1" | sed -e "s/\.pas//")"
-$excutable
+fpc "$1"
+result="$?"
+if [ -e "$excutable".o ];then
+    rm "$excutable".o
+fi
+
+if [ "$result" -eq 0 ];then
+    "$excutable"
+fi
+
+if [ -e "$excutable" ];then
+    rm "$excutable"
+fi
