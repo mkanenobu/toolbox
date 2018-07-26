@@ -1,3 +1,3 @@
 utilities
 
-This software is released under the MIT License, see LICENSE.txt.
+This softwares are released under the MIT License, see LICENSE.txt.
