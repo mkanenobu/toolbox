@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2018 kanenobu mitsuru
 EVENT="shell_notify"
 KEY="<your key>"
 URL="https://maker.ifttt.com/trigger/$EVENT/with/key/$KEY"

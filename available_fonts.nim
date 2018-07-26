@@ -1,3 +1,5 @@
+# Copyright 2018 kanenobu mitsuru
+# show system avairable fonts
 import sequtils, strutils, osproc, algorithm, sets
 
 var installedFonts:seq[string] = execProcess("/usr/bin/fc-list").splitLines
