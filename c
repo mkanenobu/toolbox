@@ -9,5 +9,5 @@ case "$file_extension" in
   "nim" ) nim c "$1";;
   "pas" ) fpc "$1";;
   "cl" | "lisp" ) lc "$1";;
-  * ) echo "Not in the list";;
+  * ) echo "File is not supported";;
 esac

@@ -1,0 +1,17 @@
+#!/bin/bash
+### Can be used for supporting langs
+
+source_file="$1"
+file_extension="$(echo "$source_file" | sed 's/^.*\.\([^\.]*\)$/\1/')"
+#shebang
+shebang="$(head -n 1 "$source_file")"
+if [[ "$shebang" =~ \#\!/ ]];then
+  eval "${shebang//\#\!//}" "$source_file"
+else
+  case "$file_extension" in
+    "nim" ) nimr "$1";;
+    "pas" ) fpr "$1";;
+    "cl" | "lisp" ) sbcl --script "$1";;
+    * ) echo "File is not supported"
+  esac
+fi
