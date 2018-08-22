@@ -3,7 +3,7 @@
 
 source_file="$1"
 file_extension="$(echo "$source_file" | sed 's/^.*\.\([^\.]*\)$/\1/')"
-echo "$file_extension"
+options="${@:2}"
 
 case "$file_extension" in
   "nim" ) nim c "$1";;
