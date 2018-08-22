@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## lisp compile (sbcl)
+source_file="$1"
+sbcl_compile "$source_file"
+chmod +x "$(echo "$source_file" | sed -e "s/\(lisp\|cl\)/fasl/")"
