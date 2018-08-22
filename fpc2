@@ -1,0 +1,11 @@
+#!/bin/bash
+# Copyright 2018 kanenobu mitsuru
+# free pascal compie and run
+
+fpc "$1"
+if [ "$?" == 0 ];then
+    excutable="${1/.pas/}"
+    if [ -e "$excutable".o ];then
+        rm "$excutable".o
+    fi
+fi
