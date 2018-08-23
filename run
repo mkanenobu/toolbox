@@ -17,9 +17,10 @@ if [[ "$shebang" =~ \#\!/ ]]; then
   runner="${shebang//\#\!//}" "$source_file" "$options"
 else
   case "$file_extension" in
-    "nim" ) runner="nim_run";;
-    "pas" ) runner="pascal_run";;
-    "cl" | "lisp" ) runner="common_lisp_run";;
+    "nim" ) runner="nim_run" ;;
+    "pas" ) runner="pascal_run" ;;
+    "php" ) runner="php" ;;
+    "cl" | "lisp" ) runner="common_lisp_run" ;;
     * ) echo "File is not supported"; exit
   esac
 fi
