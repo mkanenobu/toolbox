@@ -1,15 +1,20 @@
 #!/bin/bash
 ### Script runner for multi language
 
-source_file="$1"
+source_file="${!#}"
+options="${@:1:$#-1}"
 file_extension="$(echo "$source_file" | sed 's/^.*\.\([^\.]*\)$/\1/')"
-options="${@:2}"
 runner=""
 
-user_setting_location="$HOME/.config/runner/user_runner"
-if [ -e "$user_setting_location" ]; then
-  source "$user_setting_location"
+if [[ "${source_file}" =~ (-h|--help) ]]; then
+  echo "c [OPTION] [SOURCE_FILE]"
+  exit
 fi
+
+# user_setting_location="$HOME/.config/runner/user_runner"
+# if [ -e "$user_setting_location" ]; then
+#   source "$user_setting_location"
+# fi
 
 shebang="$(head -n 1 "$source_file")"
 
@@ -20,6 +25,8 @@ else
     "nim" ) runner="nim_run" ;;
     "pas" ) runner="pascal_run" ;;
     "php" ) runner="php" ;;
+    "py"  ) runner="python3" ;;
+    "rb"  ) runner="ruby" ;;
     "cl" | "lisp" ) runner="common_lisp_run" ;;
     * ) echo "File is not supported"; exit
   esac
