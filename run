@@ -1,15 +1,18 @@
 #!/bin/bash
 ### Script runner for multi language
 
+if [ -z "$#" ]; then
+  echo "c [OPTION] [SOURCE_FILE]"
+  exit 1
+elif [[ "${source_file}" =~ (-h|--help) ]]; then
+  echo "c [OPTION] [SOURCE_FILE]"
+  exit
+fi
+
 source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "$source_file" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 runner=""
-
-if [[ "${source_file}" =~ (-h|--help) ]]; then
-  echo "c [OPTION] [SOURCE_FILE]"
-  exit
-fi
 
 # user_setting_location="$HOME/.config/runner/user_runner"
 # if [ -e "$user_setting_location" ]; then
