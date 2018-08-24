@@ -51,14 +51,12 @@ if [ -n "${runner}" ] && [ -z "${exec_file}" ]; then
   eval "${runner} ${source_file} ${args}"
 elif [ -n "${exec_file}" ]; then
   # compile language
-  if [ -n "${exec_file}" ]; then
-    if [ ! -d "/tmp/runner" ]; then
-      mkdir -p /tmp/runner
-    fi
-    eval "${runner} ${source_file}" && \
-      chmod +x "${exec_file}"
-    "${exec_file} ${args}" && \
-      rm -r /tmp/runner
+  if [ ! -d "/tmp/runner" ]; then
+    mkdir -p /tmp/runner
   fi
+  eval "${runner} ${source_file}" && \
+    chmod +x "${exec_file}" && \
+    "${exec_file} ${args}"
+  # rm -r /tmp/runner
 fi
 
