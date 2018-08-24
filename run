@@ -10,8 +10,9 @@ elif [[ "${source_file}" =~ (-h|--help) ]]; then
 fi
 
 source_file="${!#}"
-options="${@:1:$#-1}"
-file_extension="$(echo "$source_file" | sed 's/^.*\.\([^\.]*\)$/\1/')"
+args="${@:1:$#-1}"
+file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
+exec_file="/tmp/runner/a.out"
 runner=""
 
 # user_setting_location="$HOME/.config/runner/user_runner"
@@ -19,22 +20,45 @@ runner=""
 #   source "$user_setting_location"
 # fi
 
-shebang="$(head -n 1 "$source_file")"
+if [ "$(uname)" == "Darwin" ]; then
+  c_compiler="clang"
+  cpp_compiler="clang++"
+elif [ "$(uname)" == "Linux" ]; then
+  c_compiler="gcc"
+  cpp_compiler="g++"
+fi
 
-if [[ "$shebang" =~ \#\!/ ]]; then
-  runner="${shebang//\#\!//}" "$source_file" "$options"
+shebang="$(head -n 1 "${source_file}")"
+
+if [[ "${shebang}" =~ \#\!/ ]]; then
+  runner="${shebang//\#\!//}"
 else
-  case "$file_extension" in
-    "nim" ) runner="nim_run" ;;
-    "pas" ) runner="pascal_run" ;;
+  case "${file_extension}" in
+    "c"   ) runner="${c_compiler} -o ${exec_file}" ;;
+    "cpp" ) runner="${cpp_compiler} -o ${exec_file}" ;;
+    "nim" ) runner="nim c r" ;;
+    "pas" ) runner="" ;;
     "php" ) runner="php" ;;
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
-    "cl" | "lisp" ) runner="common_lisp_run" ;;
+    "cl" | "lisp" ) runner="sbcl --script" ;;
     * ) echo "File is not supported"; exit
   esac
 fi
 
-if [ -n "$runner" ]; then
-  eval "$runner" "$source_file" "$options"
+if [ -n "${runner}" ] && [ -z "${exec_file}" ]; then
+  # script language
+  eval "${runner} ${source_file} ${args}"
+elif [ -n "${exec_file}" ]; then
+  # compile language
+  if [ -n "${exec_file}" ]; then
+    if [ ! -d "/tmp/runner" ]; then
+      mkdir -p /tmp/runner
+    fi
+    eval "${runner} ${source_file}" && \
+      chmod +x "${exec_file}"
+    "${exec_file} ${args}" && \
+      rm -r /tmp/runner
+  fi
 fi
+

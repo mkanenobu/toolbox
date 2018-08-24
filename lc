@@ -1,6 +1,11 @@
 #!/bin/bash
 
 ## lisp compile (sbcl)
+sbcl_compile(){
+  echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${1}" && \
+    chmod +x "$(echo "${1}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
+}
+
 source_file="$1"
 sbcl_compile "$source_file"
 chmod +x "$(echo "$source_file" | sed -e "s/\(lisp\|cl\)/fasl/")"
