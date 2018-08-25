@@ -1,7 +1,8 @@
 #!/bin/bash
 ### Switch compiler for each file type
 
-if [ -z "$#" ]; then
+if [ "$#" -eq 0 ]; then
+  echo "Select source file"
   echo "usage: c [OPTIONS] [SOURCE_FILE]"
   exit 1
 fi
@@ -21,10 +22,14 @@ fi
 compiler=""
 
 sbcl_compile(){
-  echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${1}" && \
-    chmod +x "$(echo "${1}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
+  echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${source_file}" && \
+    chmod +x "$(echo "${source_file}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
 }
 
+# user_setting="${XDG_CONFIG_HOME}/compile/user_setting"
+# if [ -e "${user_setting}" ]; then
+#   source "${user_setting}"
+# fi
 
 case "${file_extension}" in
   "c"   ) compiler="${c_compiler}" ;;
@@ -35,6 +40,7 @@ case "${file_extension}" in
   "ml"  ) compiler="ocamlopt" ;;
   "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
+  "rck" ) compiler="raco exe" ;;
   "cl" | "lisp" ) compiler="sbcl_compile" ;;
   * ) echo "File is not supported"; exit 1 ;;
 esac

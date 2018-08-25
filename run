@@ -2,24 +2,20 @@
 ### Script runner for multi language
 
 if [ -z "$#" ]; then
-  echo "c [OPTION] [SOURCE_FILE]"
+  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
   exit 1
 elif [[ "${source_file}" =~ (-h|--help) ]]; then
-  echo "c [OPTION] [SOURCE_FILE]"
+  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
   exit
 fi
 
-source_file="${!#}"
-args="${@:1:$#-1}"
+source_file="${1}"
+args="${@:2}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 tmp_dir="/tmp/runner"
 exec_file="${tmp_dir}/a.out"
+compile_flg=0
 runner=""
-
-# user_setting_location="$HOME/.config/runner/user_runner"
-# if [ -e "$user_setting_location" ]; then
-#   source "$user_setting_location"
-# fi
 
 if [ "$(uname)" == "Darwin" ]; then
   c_compiler="clang"
@@ -29,33 +25,42 @@ elif [ "$(uname)" == "Linux" ]; then
   cpp_compiler="g++"
 fi
 
+# user_setting="${XDG_CONFIG_HOME}/runner/user_setting"
+# if [ -e "${user_setting}" ]; then
+#   source "${user_setting}"
+# fi
+
 shebang="$(head -n 1 "${source_file}")"
 
-if [[ "${shebang}" =~ \#\!/ ]]; then
-  runner="${shebang//\#\!//}"
+if [[ "${shebang}" =~ ^\#\!/ ]]; then
+  runner="${shebang//\#\!/}"
 else
   case "${file_extension}" in
-    "c"   ) runner="${c_compiler} -o ${exec_file}" ;;
-    "cpp" ) runner="${cpp_compiler} -o ${exec_file}" ;;
+    # need to compile
+    "c"   ) runner="${c_compiler} -o ${exec_file}"; compile_flg=1 ;;
+    "cpp" ) runner="${cpp_compiler} -o ${exec_file}"; compile_flg=1 ;;
+    "rs"  ) runner="rustc -o ${exec_file}"; compile_flg=1 ;;
+    "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}"; compile_flg=1 ;;
+    "pas" ) runner="fpc -o${exec_file}"; compile_flg=1 ;;
+
     "go"  ) runner="go run" ;;
-    "rs"  ) runner="rustc -o ${exec_file}" ;;
     "hs"  ) runner="runghc" ;;
-    "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}" ;;
     "ml"  ) runner="ocaml" ;;
-    "pas" ) runner="fpc -o${exec_file}" ;;
+    "sh"  ) runner="sh" ;;
+    "bash") runner="bash" ;;
     "php" ) runner="php" ;;
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
+    "lua" ) runner="lua" ;;
+    "scm" | "rkt" ) runner="racket -r" ;;
     "cl" | "lisp" ) runner="sbcl --script" ;;
     * ) echo "File is not supported"; exit
   esac
 fi
 
-if [ -n "${runner}" ] && [ -z "${exec_file}" ]; then
-  # script language
+if [ -n "${runner}" ] && [ "${compile_flg}" -eq 0 ]; then
   eval "${runner} ${source_file} ${args}"
-elif [ -n "${exec_file}" ]; then
-  # compile language
+elif [ "${compile_flg}" -eq 1 ]; then
   if [ ! -d "${tmp_dir}" ]; then
     mkdir -p "${tmp_dir}"
   fi
@@ -63,5 +68,8 @@ elif [ -n "${exec_file}" ]; then
     chmod +x "${exec_file}" && \
     ${exec_file} "${args}"
   rm -r /tmp/runner
+else
+  echo "Error occurred!"
+  exit 1
 fi
 
