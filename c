@@ -9,7 +9,6 @@ fi
 source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
-target_file=""
 
 if [ "$(uname)" == "Darwin" ]; then
   c_compiler="clang"
@@ -30,10 +29,9 @@ sbcl_compile(){
 case "${file_extension}" in
   "c"   ) compiler="${c_compiler}" ;;
   "cpp" ) compiler="${cpp_compiler}" ;;
-  "go"  ) compiler="go tool compile" ;;
+  "go"  ) compiler="go build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="ghc" ;;
-  "scss") compiler="node-sass"; target_file="${source_file//\.scss/\.css}" ;;
   "ml"  ) compiler="ocamlopt" ;;
   "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
@@ -42,5 +40,5 @@ case "${file_extension}" in
 esac
 
 if [ -n "${compiler}" ]; then
-  eval "${compiler} ${options} ${source_file} ${target_file}"
+  eval "${compiler} ${options} ${source_file}"
 fi

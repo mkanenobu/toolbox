@@ -12,7 +12,8 @@ fi
 source_file="${!#}"
 args="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
-exec_file="/tmp/runner/a.out"
+tmp_dir="/tmp/runner"
+exec_file="${tmp_dir}/a.out"
 runner=""
 
 # user_setting_location="$HOME/.config/runner/user_runner"
@@ -36,8 +37,12 @@ else
   case "${file_extension}" in
     "c"   ) runner="${c_compiler} -o ${exec_file}" ;;
     "cpp" ) runner="${cpp_compiler} -o ${exec_file}" ;;
-    "nim" ) runner="nim c r" ;;
-    "pas" ) runner="" ;;
+    "go"  ) runner="go run" ;;
+    "rs"  ) runner="rustc -o ${exec_file}" ;;
+    "hs"  ) runner="runghc" ;;
+    "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}" ;;
+    "ml"  ) runner="ocaml" ;;
+    "pas" ) runner="fpc -o${exec_file}" ;;
     "php" ) runner="php" ;;
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
@@ -51,12 +56,12 @@ if [ -n "${runner}" ] && [ -z "${exec_file}" ]; then
   eval "${runner} ${source_file} ${args}"
 elif [ -n "${exec_file}" ]; then
   # compile language
-  if [ ! -d "/tmp/runner" ]; then
-    mkdir -p /tmp/runner
+  if [ ! -d "${tmp_dir}" ]; then
+    mkdir -p "${tmp_dir}"
   fi
   eval "${runner} ${source_file}" && \
     chmod +x "${exec_file}" && \
-    "${exec_file} ${args}"
-  # rm -r /tmp/runner
+    ${exec_file} "${args}"
+  rm -r /tmp/runner
 fi
 
