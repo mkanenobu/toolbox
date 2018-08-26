@@ -1,12 +1,11 @@
 #!/bin/bash
 ### Script runner for multi language
 
+set -Ceu
+
 if [ -z "$#" ]; then
   echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
   exit 1
-elif [[ "${source_file}" =~ (-h|--help) ]]; then
-  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
-  exit
 fi
 
 source_file="${1}"
@@ -17,13 +16,15 @@ exec_file="${tmp_dir}/a.out"
 compile_flg=0
 runner=""
 
-if [ "$(uname)" == "Darwin" ]; then
-  c_compiler="clang"
-  cpp_compiler="clang++"
-elif [ "$(uname)" == "Linux" ]; then
-  c_compiler="gcc"
-  cpp_compiler="g++"
+if [[ "${source_file}" =~ (-h|--help) ]]; then
+  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
+  exit
 fi
+
+c_compiler="clang"
+cpp_compiler="clang++"
+scheme_runner="racket -r"
+lisp_runner="sbcl --script"
 
 # user_setting="${XDG_CONFIG_HOME}/runner/user_setting"
 # if [ -e "${user_setting}" ]; then
@@ -52,9 +53,9 @@ else
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
     "lua" ) runner="lua" ;;
-    "scm" | "rkt" ) runner="racket -r" ;;
-    "cl" | "lisp" ) runner="sbcl --script" ;;
-    * ) echo "File is not supported"; exit
+    "scm" | "rkt" ) runner="${scheme_runner}" ;;
+    "cl" | "lisp" ) runner="${lisp_runner}" ;;
+    * ) echo "File is not supported"; exit 1 ;;
   esac
 fi
 
