@@ -1,8 +1,6 @@
 #!/bin/bash
 
-if [ "${#}" -eq 0 ]; then
-  exit 1
-elif [ "${1}" -eq "show" ]; then
+if [ "${1}" -eq "show" ]; then
   git stash list -p
   exit
 fi
