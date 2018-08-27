@@ -1,7 +1,10 @@
 #!/bin/bash
 
-if [ "$#" -eq 0 ]; then
+if [ "${#}" -eq 0 ]; then
   exit 1
+elif [ "${1}" -eq "show" ]; then
+  git stash list -p
+  exit
 fi
 
 target_stash="$(git stash list | peco | cut -d ":" -f 1)"

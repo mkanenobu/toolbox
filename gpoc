@@ -2,16 +2,17 @@
 ## git push origin current branch
 gpoc(){
     current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
-    echo "Push to $current_branch"
-    if [[ "$current_branch" =~ (master|release) ]]; then
+    echo "Push to ${current_branch}"
+    if [[ "${current_branch}" =~ (master|release|develop) ]]; then
+        echo "You are going to push to ${current_branch}"
         read -rp "Are you sure?(y/N):" confirm
-        if [[ "$confirm" =~ (y|yes|Yes) ]]; then
-            git push origin "$current_branch"
+        if [[ "${confirm}" =~ (y|yes|Yes) ]]; then
+            git push origin "${current_branch}"
         else
             echo ""
         fi
     else
-        git push origin "$current_branch"
+        git push origin "${current_branch}"
     fi
 }
 
