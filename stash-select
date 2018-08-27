@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+  exit 1
+fi
+
+target_stash="$(git stash list | peco | cut -d ":" -f 1)"
+git stash pop "${target_stash}"
