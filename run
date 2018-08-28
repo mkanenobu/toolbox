@@ -3,7 +3,7 @@
 
 set -Ceu
 
-if [ -z "$#" ]; then
+if [ "$#" -eq 0 ]; then
   echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
   exit 1
 fi

@@ -3,15 +3,17 @@
 
 set -Ceu
 
+if [ "$#" -eq 0 ]; then
+  echo "usage: c [OPTIONS] [SOURCE_FILE]"
+  exit 1
+fi
+
 source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 compiler=""
 
-if [ "$#" -eq 0 ]; then
-  echo "usage: c [OPTIONS] [SOURCE_FILE]"
-  exit 1
-elif [ ! -e "${source_file}" ]; then
+if [ ! -e "${source_file}" ]; then
   echo "File is not found"
   echo "usage: c [OPTIONS] [SOURCE_FILE]"
   exit 1
