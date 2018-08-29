@@ -2,11 +2,13 @@
 
 # branch swither
 
-if [ "$1" = "show" ]; then
+if [ "$1" == "show" ]; then
   :
+elif [ "$1" == "-f" ]; then
+  git fetch
 fi
 
-target_branch="$(git branch -a | )"
+target_branch="$(git branch -a | fzf)"
 if [ "$(echo "$target_branch" | grep "\*")" ]; then
   echo "It is current branch"
 elif [ "$(echo "$target_branch" | cut -d '/' -f 1)" = "  remotes" ]; then
