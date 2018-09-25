@@ -10,7 +10,7 @@ gpoc(){
         if [[ "${confirm}" =~ Yes ]]; then
             git push origin "${current_branch}"
         else
-            echo ""
+            echo "If you want push to master, Type 'Yes'"
         fi
     else
         git push origin "${current_branch}"
