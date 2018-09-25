@@ -6,8 +6,8 @@ gpoc(){
     echo "Push to ${current_branch}"
     if [[ "${current_branch}" =~ (master|release|develop) ]]; then
         echo "You are going to push to ${current_branch}"
-        read -rp "Are you sure?(y/N):" confirm
-        if [[ "${confirm}" =~ (y|yes|Yes) ]]; then
+        read -rp "Are you sure?(Yes/No):" confirm
+        if [[ "${confirm}" =~ Yes ]]; then
             git push origin "${current_branch}"
         else
             echo ""
