@@ -50,6 +50,7 @@ case "${file_extension}" in
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="scheme_compiler" ;;
   "rkt" ) compiler="raco exe" ;;
+  "ts"  ) compiler="tsc" ;;
   "cl" | "lisp" ) compiler="sbcl_compiler" ;;
   * ) echo "File is not supported"; exit 1 ;;
 esac
