@@ -1,0 +1,15 @@
+#!/bin/bash
+set -Ceu
+format="${1}"
+filename="${2}"
+remove_ext="$(sed -e "s/\.wav//g")"
+cmd=""
+
+case "$format" in
+  "mp3" ) cmd="lame -b 192 ${filename}" ;;
+  "ogg" ) cmd="oggenc ${filename}" ;;
+  "flac") cmd="flac -8 ${filename}" ;;
+  "opus") cmd="opusenc ${filename} ${remove_ext}" ;;
+esac
+
+eval "${cmd}"
