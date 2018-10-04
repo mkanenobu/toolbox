@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# delete branch
+
+target_branch="$1"
+
+if [ "$target_branch" != "master" ]; then
+  git push --delete origin "$target_branch"
+fi
