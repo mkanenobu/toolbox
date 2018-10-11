@@ -1,4 +1,6 @@
 # Copyright 2018 kanenobu mitsuru
+
+# for linux
 # show system avairable fonts
 import sequtils, strutils, osproc, algorithm, sets
 

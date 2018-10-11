@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# wrapper for audio encoders
+
 set -Ceu
 
 format="${1}"
