@@ -25,6 +25,7 @@ c_compiler="clang"
 cpp_compiler="clang++"
 scheme_runner="racket -r"
 lisp_runner="sbcl --script"
+forth_runner="gforth"
 
 # user_setting="${XDG_CONFIG_HOME}/runner/user_setting"
 # if [ -e "${user_setting}" ]; then
@@ -53,6 +54,7 @@ else
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
     "lua" ) runner="lua" ;;
+    "fs" | "fth"  ) runner="${forth_runner}"; args="${args} -e bye";;
     "scm" | "rkt" ) runner="${scheme_runner}" ;;
     "cl" | "lisp" ) runner="${lisp_runner}" ;;
     * ) echo "File is not supported"; exit 1 ;;

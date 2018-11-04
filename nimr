@@ -2,4 +2,4 @@
 source_file="$1"
 nim c -r --verbosity:0 --hints:off "$source_file"
 rm "${source_file/.nim/}"
-rm -r ./nimcache
+rm -rf ./nimcache
