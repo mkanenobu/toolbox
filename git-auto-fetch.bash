@@ -1,4 +1,7 @@
 #!/bin/bash
+
+git config --global alias.root 'rev-parse --show-toplevel'
+
 git-auto-fetch() {
   current_root="$(git root 2>/dev/null)"
   if [ -z "${current_root}" ]; then
