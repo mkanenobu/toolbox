@@ -7,24 +7,28 @@ git-auto-fetch() {
   fi
 
   current_time="$(date +%s)"
-  interval="600" # seconds
+  interval="3600" # seconds
 
   hists_file="${HOME}/.cache/.git-auto-fetch"
   tmp_file="${HOME}/.cache/.git-auto-fetch-tmp"
 
   if [ -f "${hists_file}" ]; then
-    saved="$(rg -N "${current_root}" "${hists_file}")"
+    saved="$(grep "${current_root}"$ "${hists_file}")"
+    if [ "$(grep -c "${current_root}"$ "${hists_file}")" -gt 1 ]; then
+      grep -v "${current_root}"$ "${hists_file}" >| "${tmp_file}"
+      echo "${current_time},${current_root}" >> "${tmp_file}"
+    fi
     if [ -z "${saved}" ]; then
-      echo "Git fetching in background"
-      (git fetch >/dev/null &)
+      echo "Git fetching in background and Added to cache file"
+      (git fetch >/dev/null 2>&1 &)
       cat "${hists_file}" >| "${tmp_file}"
       echo "${current_time},${current_root}" >> "${tmp_file}"
     else
       saved_time="$(echo "${saved}" | cut -d"," -f 1)"
-      if [ "$((current_time - saved_time))" -gt "${interval}" ]; then
+      if [ "${interval}" -lt "$((current_time - saved_time))" ]; then
         echo "Git fetching in background"
-        (git fetch >/dev/null &)
-        cat "${hists_file}" >| "${tmp_file}"
+        (git fetch >/dev/null 2>&1 &)
+        grep -v "${current_root}"$ "${hists_file}" >| "${tmp_file}"
         echo "${current_time},${current_root}" >> "${tmp_file}"
       fi
     fi
