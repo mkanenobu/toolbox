@@ -14,11 +14,14 @@ git-auto-fetch() {
   if [ -f "${hists_file}" ]; then
     saved="$(rg -N "${current_root}" "${hists_file}")"
     if [ -z "${saved}" ]; then
+      echo "Git fetching in background"
+      (git fetch >/dev/null &)
       cat "${hists_file}" >| "${tmp_file}"
       echo "${current_time},${current_root}" >> "${tmp_file}"
     else
       saved_time="$(echo "${saved}" | cut -d"," -f 1)"
       if [ "$((current_time - saved_time))" -gt "${interval}" ]; then
+        echo "Git fetching in background"
         (git fetch >/dev/null &)
         cat "${hists_file}" >| "${tmp_file}"
         echo "${current_time},${current_root}" >> "${tmp_file}"
