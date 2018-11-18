@@ -11,20 +11,13 @@ fi
 source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
+# no_extension="$(echo "${source_file}" | )"
 compiler=""
 
 if [ ! -e "${source_file}" ]; then
   echo "File is not found"
   echo "usage: c [OPTIONS] [SOURCE_FILE]"
   exit 1
-fi
-
-if [ "$(uname)" == "Darwin" ]; then
-  c_compiler="clang"
-  cpp_compiler="clang++"
-else
-  c_compiler="gcc"
-  cpp_compiler="g++"
 fi
 
 scheme_compiler="csc"
@@ -38,7 +31,6 @@ sbcl_compiler(){
 #   source "${user_setting}"
 # fi
 
-# User setting
 c_compiler="clang"
 cpp_compiler="clang++"
 
@@ -50,7 +42,7 @@ case "${file_extension}" in
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="ghc" ;;
   "ml"  ) compiler="ocamlopt" ;;
-  "nim" ) compiler="nim c" ;;
+  "nim" ) compiler="nim" ;;
   "pas" ) compiler="fpc" ;;
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="$scheme_compiler" ;;
