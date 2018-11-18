@@ -2,19 +2,24 @@
 ## git push origin current branch
 
 gpoc(){
-    current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
-    echo "Push to ${current_branch}"
-    if [[ "${current_branch}" =~ (master|release|develop) ]]; then
-        echo "You are going to push to ${current_branch}"
-        read -rp "Are you sure?(Yes/No):" confirm
-        if [[ "${confirm}" =~ Yes ]]; then
-            git push origin "${current_branch}"
-        else
-            echo "If you want push to master, Type 'Yes'"
-        fi
-    else
-        git push origin "${current_branch}"
+  # Prevent push to "master" option
+  allow_push2master="true"
+  current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
+  echo "Push to ${current_branch}"
+  if [[ "${current_branch}" =~ (master|release|develop) ]]; then
+    if [ "${allow_push2master}" == "false" ] && [ "${current_branch}" == "master" ]; then
+      exit 1
     fi
+    echo "You are going to push to ${current_branch}"
+    read -rp "Are you sure?(Yes/No):" confirm
+    if [[ "${confirm}" =~ Yes ]]; then
+      git push origin "${current_branch}"
+    else
+      echo "If you want push to master, Type 'Yes'"
+    fi
+  else
+    git push origin "${current_branch}"
+  fi
 }
 
 gpoc
