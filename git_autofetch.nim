@@ -3,7 +3,7 @@ import sequtils, strutils
 
 const interval = 3600  # second
 
-let
+var
   (gitRoot, exitCode) = execCmdEx("git rev-parse --show-toplevel")
 
 if exitCode != 0:
@@ -11,9 +11,11 @@ if exitCode != 0:
 
 let
   cacheDir = getHomeDir() & ".cache/"
-  cacheFilePath = cacheDir & "git-autofetch"
-  tmpFilePath = cacheDir & "git-autofetch.tmp"
-  currentTime = epochTime()
+  cacheFilePath = cacheDir & "git_autofetch"
+  tmpFilePath = cacheDir & "git_autofetch.tmp"
+  currentTime: int = int(epochTime())
+
+gitRoot = gitRoot.splitLines[0]
 
 var
   cacheFile, tmpFile: File
@@ -22,30 +24,32 @@ var
 
 proc main() =
   if not existsFile(cacheFilePath):
+    echo "Create cache file and this directory added to cache"
     cacheFile = open(cacheFilePath, FileMode.fmWrite)
-    defer: close(cacheFile)
     cacheFile.writeLine(fmt"{currentTime},{gitRoot}")
   else:
     cacheFile = open(cacheFilePath, FileMode.fmRead)
-    tmpFile = open(tmpFilePath, FileMode.fmWrite)
     defer: close(cacheFile)
+    tmpFile = open(tmpFilePath, FileMode.fmWrite)
     defer: close(tmpFile)
 
     for i in lines(cacheFile):
-      if i.split(",")[1] == gitRoot:
+      if i.split(",")[1] != gitRoot:
+        tmpFile.writeLine(i)
+      else:
         cachedFlg = true
-        if currentTime - parseFloat(i.split(",")[0]) >= interval:
+        if currentTime - parseInt(i.split(",")[0]) >= interval:
           echo "Exec git fetch"
           discard execProcess("git fetch")
-      else:
-        tmpFile.writeLine(i)
+          tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
+        else:
+          tmpFile.writeLine(i)
 
     if not cachedFlg:
-      echo "Exec git fetch and Added to cache"
+      echo "Exec git fetch and added to cache"
       tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
 
-    copyFile(tmpFilePath, cacheFilePath)
+    if existsFile(tmpFilePath):
+      moveFile(tmpFilePath, cacheFilePath)
 
-
-when isMainModule:
-  main()
+main()

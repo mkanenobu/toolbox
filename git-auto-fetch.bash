@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### this is slow
+
 git-auto-fetch() {
   current_root="$(git rev-parse --show-toplevel 2>/dev/null)"
   if [ -z "${current_root}" ]; then
