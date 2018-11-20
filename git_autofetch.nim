@@ -20,11 +20,11 @@ gitRoot = gitRoot.splitLines[0]
 var
   cacheFile, tmpFile: File
   cachedGitRoot, cacheTime: string
-  cachedFlg: bool = false
+  isCached: bool = false
 
 proc main() =
   if not existsFile(cacheFilePath):
-    echo "Create cache file and this directory added to cache"
+    echo "Create cache file and this directory added to git_autofetch cache"
     cacheFile = open(cacheFilePath, FileMode.fmWrite)
     cacheFile.writeLine(fmt"{currentTime},{gitRoot}")
   else:
@@ -37,16 +37,16 @@ proc main() =
       if i.split(",")[1] != gitRoot:
         tmpFile.writeLine(i)
       else:
-        cachedFlg = true
+        isCached = true
         if currentTime - parseInt(i.split(",")[0]) >= interval:
           echo "Exec git fetch"
-          discard execProcess("git fetch")
+          discard execProcess("(git fetch &)")
           tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
         else:
           tmpFile.writeLine(i)
 
-    if not cachedFlg:
-      echo "Exec git fetch and added to cache"
+    if not isCached:
+      echo "Added to git_autofetch cache"
       tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
 
     if existsFile(tmpFilePath):
