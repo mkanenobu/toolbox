@@ -40,7 +40,7 @@ proc main() =
         isCached = true
         if currentTime - parseInt(i.split(",")[0]) >= interval:
           echo "Exec git fetch"
-          discard execProcess("(git fetch &)")
+          discard execShellCmd("(git fetch &)")
           tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
         else:
           tmpFile.writeLine(i)
