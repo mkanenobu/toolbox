@@ -1,0 +1,19 @@
+#!/bin/bash
+### add to gitignore
+
+if [ $# -eq 0 ]; then
+  exit 1
+fi
+
+if [ ! -e "${1}" ]; then
+  echo "Not exist" 1>&2
+  exit 1
+fi
+
+gitroot="$(git rev-parse --show-toplevel)"
+gitignore="${gitroot}/.gitignore"
+dest="$(readlink -f "${1}")"
+
+dest="$(echo "${dest}" | sed -e "s@"${gitroot}"@@g" )"
+
+echo "${dest}" >> "${gitignore}"
