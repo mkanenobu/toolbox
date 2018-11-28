@@ -42,7 +42,7 @@ case "${file_extension}" in
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="ghc" ;;
   "ml"  ) compiler="ocamlopt" ;;
-  "nim" ) compiler="nim" ;;
+  "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="$scheme_compiler" ;;
