@@ -33,16 +33,17 @@ sbcl_compiler(){
 
 c_compiler="clang"
 cpp_compiler="clang++"
-
+d_compiler="gdc"
 
 case "${file_extension}" in
   "c"   ) compiler="$c_compiler" ;;
   "cpp" ) compiler="$cpp_compiler" ;;
+  "d"   ) compiler="$d_compiler" ;;
   "go"  ) compiler="go build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="ghc" ;;
   "ml"  ) compiler="ocamlopt" ;;
-  "nim" ) compiler="nim" ;;
+  "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="$scheme_compiler" ;;
