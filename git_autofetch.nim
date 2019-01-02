@@ -1,7 +1,7 @@
 import os, osproc, ospaths, strformat, times
 import sequtils, strutils
 
-const interval = 3600  # second
+const interval = 300  # second
 
 var
   (gitRoot, exitCode) = execCmdEx("git rev-parse --show-toplevel")
@@ -10,46 +10,48 @@ if exitCode != 0:
   quit 0
 
 let
-  cacheDir = getHomeDir() & ".cache/"
-  cacheFilePath = cacheDir & "git_autofetch"
-  tmpFilePath = cacheDir & "git_autofetch.tmp"
+  cacheDir: string = getHomeDir() & ".cache/"
+  cacheFilePath: string = cacheDir & "git_autofetch"
   currentTime: int = int(epochTime())
 
 gitRoot = gitRoot.splitLines[0]
 
 var
-  cacheFile, tmpFile: File
+  cacheFile: File
   cachedGitRoot, cacheTime: string
+  tmp1: string = ""
+  tmp2: string = ""
   isCached: bool = false
+  spendTime: int
 
 proc main() =
-  if not existsFile(cacheFilePath):
-    echo "Create cache file and this directory added to git_autofetch cache"
-    cacheFile = open(cacheFilePath, FileMode.fmWrite)
-    cacheFile.writeLine(fmt"{currentTime},{gitRoot}")
+  if existsFile(cacheFilePath):
+    tmp1 = readFile(cacheFilePath)
   else:
-    cacheFile = open(cacheFilePath, FileMode.fmRead)
-    defer: close(cacheFile)
-    tmpFile = open(tmpFilePath, FileMode.fmWrite)
-    defer: close(tmpFile)
+    # create file
+    var createF = open(cacheFilePath, FileMode.fmWrite)
+    createF.close()
 
-    for i in lines(cacheFile):
-      if i.split(",")[1] != gitRoot:
-        tmpFile.writeLine(i)
-      else:
+  if tmp1 != "":
+    for i in splitLines(tmp1):
+      if i == "":
+        continue
+      if i.split(",")[1] == gitRoot:
         isCached = true
-        if currentTime - parseInt(i.split(",")[0]) >= interval:
-          echo "Exec git fetch"
-          discard execShellCmd("(git fetch &)")
-          tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
+        spendTime = currentTime - parseInt(i.split(',')[0])
+        if currentTime - parseInt(i.split(',')[0]) >= interval:
+          echo fmt"Exec git fetch ({spendTime})"
+          discard execShellCmd("(git fetch & 1>/dev/null 2>/dev/null)")
+          tmp2 &= fmt"{currentTime},{gitRoot}" & '\n'
         else:
-          tmpFile.writeLine(i)
+          tmp2 &= i & '\n'
+      else:
+        tmp2 &= i & '\n'
 
-    if not isCached:
-      echo "Added to git_autofetch cache"
-      tmpFile.writeLine(fmt"{currentTime},{gitRoot}")
+  if not isCached:
+    tmp2 &= fmt"{currentTime},{gitRoot}" & '\n'
 
-    if existsFile(tmpFilePath):
-      moveFile(tmpFilePath, cacheFilePath)
+  cacheFilePath.writeFile(tmp2)
 
-main()
+if isMainModule:
+  main()
