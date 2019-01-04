@@ -1,7 +1,7 @@
 import os, osproc, ospaths, strformat, times
 import sequtils, strutils
 
-const interval = 300  # second
+const interval = 600  # second
 
 var
   (gitRoot, exitCode) = execCmdEx("git rev-parse --show-toplevel")
@@ -40,7 +40,7 @@ proc main() =
         isCached = true
         spendTime = currentTime - parseInt(i.split(',')[0])
         if currentTime - parseInt(i.split(',')[0]) >= interval:
-          echo fmt"Exec git fetch ({spendTime})"
+          # echo fmt"Exec git fetch ({spendTime})"
           discard execShellCmd("(git fetch & 1>/dev/null 2>/dev/null)")
           tmp2 &= fmt"{currentTime},{gitRoot}" & '\n'
         else:
