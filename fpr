@@ -5,7 +5,7 @@
 fpc "$1"
 if [ "$?" == 0 ];then
     excutable="${1/.pas/}"
-    "$excutable"
+    ./"$excutable"
     if [ -e "$excutable" ];then
         rm "$excutable"
     fi
