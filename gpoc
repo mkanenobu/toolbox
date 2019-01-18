@@ -12,7 +12,7 @@ gpoc(){
     fi
     echo "You are going to push to ${current_branch}"
     read -rp "Are you sure?(Yes/No):" confirm
-    if [[ "${confirm}" =~ Yes ]]; then
+    if [[ "${confirm,,}" = yes ]]; then
       git push origin "${current_branch}"
     else
       echo "If you want push to master, Type 'Yes'"
