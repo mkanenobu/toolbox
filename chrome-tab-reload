@@ -1,0 +1,7 @@
+#!/bin/bash
+
+active_window="$(xdotool getactivewindow getwindowpid)"
+xdotool windowfocus "$(xdotool search --onlyvisible --name google)"
+xdotool key ctrl+r
+xdotool windowfocus "$(xdotool search --onlyvisible --pid ${active_window})"
+
