@@ -1,0 +1,4 @@
+#!/bin/bash
+
+### for type :wq in terminal
+exit 1
