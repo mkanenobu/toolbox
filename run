@@ -21,11 +21,13 @@ if [[ "${source_file}" =~ (-h|--help) ]]; then
   exit
 fi
 
-c_compiler="clang"
-cpp_compiler="clang++"
+[ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
+[ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
 scheme_runner="racket -r"
 lisp_runner="sbcl --script"
 forth_runner="gforth"
+
+[ "$(which stack)" ] && haskell_stack=true || haskell_stack=false
 
 # user_setting="${XDG_CONFIG_HOME}/runner/user_setting"
 # if [ -e "${user_setting}" ]; then
@@ -46,7 +48,7 @@ else
     "pas" ) runner="fpc -o${exec_file}"; compile_flg=1 ;;
 
     "go"  ) runner="go run" ;;
-    "hs"  ) runner="runghc" ;;
+    "hs"  ) runner="$(if [ "${haskell_stack}" ]; then echo "stack "; fi) runghc" ;;
     "ml"  ) runner="ocaml" ;;
     "sh"  ) runner="sh" ;;
     "bash") runner="bash" ;;
@@ -75,4 +77,3 @@ else
   echo "Error occurred!"
   exit 1
 fi
-
