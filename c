@@ -25,6 +25,9 @@ sbcl_compiler(){
   echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${source_file}" && \
     chmod +x "$(echo "${source_file}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
 }
+[ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
+[ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
+[ "$(which stack)" ] && haskell_stack=true || haskell_stack=false
 
 # user_setting="${XDG_CONFIG_HOME}/compile/user_setting"
 # if [ -e "${user_setting}" ]; then
