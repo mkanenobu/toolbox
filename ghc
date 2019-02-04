@@ -2,5 +2,5 @@
 
 stack ghc "$1"
 filename="$(echo "$1" | sed -e 's/\.[^\.]*$//')"
-rm "${filename}.o"
 rm "${filename}.hi"
+rm "${filename}.o"

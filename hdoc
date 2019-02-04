@@ -5,10 +5,18 @@ if [ $# -eq 0 ];then
   exit 1
 fi
 
+if [ $# -eq 2 ];then
+  searching="${2}"
+  s="import ${1} ${s}"
+else
+  searching="${1}"
+fi
+
 s="""
-:t ${1}
-:doc ${1}
+${s}
+:t ${searching}
+:doc ${searching}
 """
 
-echo "$s" | stack ghci 2>/dev/null | tail -n +3 | sed -e "s/Prelude> //g" -e "/Leaving GHCi./d"
+echo "$s" | stack ghci 2>/dev/null | tail -n +3 | sed -e "s/Prelude>*\ //g" -e "/Leaving GHCi./d"
 

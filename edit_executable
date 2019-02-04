@@ -1,0 +1,3 @@
+#!/bin/bash
+
+eval "${EDITOR} $(which "${1}")"
