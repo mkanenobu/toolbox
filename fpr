@@ -3,7 +3,7 @@
 # free pascal compie and run
 
 _fpr() {
-  fpc "$1" 2>/dev/null
+  /usr/bin/fpc "$@" 2>/dev/null
   result=$?
   if [ "$result" == "0" ]; then
     excutable="${1/.pas/}"
@@ -23,4 +23,4 @@ _fpr() {
   fi
 }
 
-_fpr "$1"
+_fpr "$@"
