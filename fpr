@@ -2,14 +2,25 @@
 # Copyright 2018 kanenobu mitsuru
 # free pascal compie and run
 
-fpc "$1"
-if [ "$?" == 0 ];then
+_fpr() {
+  fpc "$1" 2>/dev/null
+  result=$?
+  if [ "$result" == "0" ]; then
     excutable="${1/.pas/}"
-    ./"$excutable"
-    if [ -e "$excutable" ];then
-        rm "$excutable"
+    if [ -e ./"$excutable" ]; then
+      ./"$excutable"
+    elif [ -x "$excutable" ]; then
+      "$excutable"
     fi
-    if [ -e "$excutable".o ];then
-        rm "$excutable".o
+
+    if [ -e "$excutable" ]; then
+      rm "$excutable"
     fi
-fi
+
+    if [ -e "$excutable".o ]; then
+      rm "$excutable".o
+    fi
+  fi
+}
+
+_fpr "$1"

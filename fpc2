@@ -1,11 +1,11 @@
 #!/bin/bash
 # Copyright 2018 kanenobu mitsuru
-# free pascal compie and run
+# free pascal compile and remove middle file
 
-fpc "$1"
-if [ "$?" == 0 ];then
+if fpc "$1";then
     excutable="${1/.pas/}"
     if [ -e "$excutable".o ];then
         rm "$excutable".o
     fi
 fi
+
