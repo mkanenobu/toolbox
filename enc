@@ -4,6 +4,13 @@
 
 set -Ceu
 
+if [ $# -ne 2 ]; then
+  echo "enc [Format] [File]"
+  echo ""
+  echo "Format: mp3, ogg, flac, opus"
+  exit 1
+fi
+
 format="${1}"
 infile="${2}"
 remove_ext="${infile/\.wav/}"
