@@ -1,3 +1,5 @@
 #!/bin/bash
 
-gforth "$1" -e bye
+if [ -x gforth ]; then
+  gforth "$1" -e bye
+fi
