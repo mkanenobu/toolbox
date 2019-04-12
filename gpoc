@@ -5,9 +5,12 @@ gpoc(){
   # Prevent push to "master" option
   allow_push2master="true"
   current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
+  pushDest="$(git remote show origin | grep "mkanenobu")"
   echo "Push to ${current_branch}"
   if [[ "${current_branch}" =~ (master|release|develop) ]]; then
-    if [ "${allow_push2master}" == "false" ] && [ "${current_branch}" == "master" ]; then
+    if [ "${allow_push2master}" == "false" ] \
+      && [ "${current_branch}" == "master" ]\
+      || [ -z "${pushDest}" ] ; then
       exit 1
     fi
     echo "You are going to push to ${current_branch}"
