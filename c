@@ -11,6 +11,7 @@ fi
 source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
+filename_without_extension="${source_file%.*}"
 # no_extension="$(echo "${source_file}" | )"
 compiler=""
 
@@ -37,15 +38,20 @@ sbcl_compiler(){
 c_compiler="clang"
 cpp_compiler="clang++"
 d_compiler="gdc"
+middle_files=""
 
 case "${file_extension}" in
-  "c"   ) compiler="$c_compiler" ;;
-  "cpp" ) compiler="$cpp_compiler" ;;
+  "c"   ) compiler="$c_compiler" \
+    options="${options} -o ${filename_without_extension}" ;;
+  "cpp" ) compiler="$cpp_compiler" \
+    options="${options} -o ${filename_without_extension}" ;;
   "d"   ) compiler="$d_compiler" ;;
   "go"  ) compiler="go build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="ghc" ;;
-  "ml"  ) compiler="ocamlopt" ;;
+  "ml"  ) compiler="ocamlopt" \
+    options="${options} -o ${filename_without_extension}" \
+    middle_files="${filename_without_extension}.cmi ${filename_without_extension}.cmx" ;;
   "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
   "ros" ) compiler="ros build" ;;
@@ -59,3 +65,14 @@ esac
 if [ -n "${compiler}" ]; then
   eval "${compiler} ${options} ${source_file}"
 fi
+
+if [ -e "${filename_without_extension}.o" ]; then
+  rm "${filename_without_extension}.o"
+fi
+
+for middle_file in ${middle_files}; do
+  if [ -e "${middle_file}" ]; then
+    rm "${middle_file}"
+  fi
+done
+

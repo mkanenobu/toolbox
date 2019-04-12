@@ -23,7 +23,9 @@ fi
 
 [ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
 [ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
-scheme_runner="racket -r"
+[ "$(which gosh)" ] && scheme_runner="gosh" \
+  || [ "$(which scheme)" ] && scheme_runner="scheme --quiet < " \
+  || [ "$(which racket)" ] && scheme_runner="racket -r"
 lisp_runner="sbcl --script"
 forth_runner="gforth"
 
