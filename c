@@ -28,7 +28,7 @@ sbcl_compiler(){
 }
 [ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
 [ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
-[ "$(which stack)" ] && haskell_stack=true || haskell_stack=false
+[ "$(which stack)" ] && haskell_compiler="stack ghc -- " || haskell_compiler="ghc"
 
 # user_setting="${XDG_CONFIG_HOME}/compile/user_setting"
 # if [ -e "${user_setting}" ]; then
@@ -38,7 +38,7 @@ sbcl_compiler(){
 c_compiler="clang"
 cpp_compiler="clang++"
 d_compiler="gdc"
-middle_files=""
+middle_file_extensions=""
 
 case "${file_extension}" in
   "c"   ) compiler="$c_compiler" \
@@ -48,10 +48,11 @@ case "${file_extension}" in
   "d"   ) compiler="$d_compiler" ;;
   "go"  ) compiler="go build" ;;
   "rs"  ) compiler="rustc" ;;
-  "hs"  ) compiler="ghc" ;;
+  "hs"  ) compiler="${haskell_compiler}" \
+    middle_file_extensions="hi";;
   "ml"  ) compiler="ocamlopt" \
     options="${options} -o ${filename_without_extension}" \
-    middle_files="${filename_without_extension}.cmi ${filename_without_extension}.cmx" ;;
+    middle_file_extensions="cmi cmx" ;;
   "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" ;;
   "ros" ) compiler="ros build" ;;
@@ -70,9 +71,9 @@ if [ -e "${filename_without_extension}.o" ]; then
   rm "${filename_without_extension}.o"
 fi
 
-for middle_file in ${middle_files}; do
-  if [ -e "${middle_file}" ]; then
-    rm "${middle_file}"
+for extension in ${middle_file_extensions}; do
+  if [ -e "${filename_without_extension}.${extension}" ]; then
+    rm "${filename_without_extension}.${extension}"
   fi
 done
 
