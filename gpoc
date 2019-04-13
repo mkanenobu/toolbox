@@ -3,25 +3,30 @@
 
 gpoc(){
   # Prevent push to "master" option
-  allow_push2master="true"
+  safe_guard="true"
   current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
   pushDest="$(git remote show origin | grep "mkanenobu")"
   echo "Push to ${current_branch}"
-  if [[ "${current_branch}" =~ (master|release|develop) ]]; then
-    if [ "${allow_push2master}" == "false" ] \
-      && [ "${current_branch}" == "master" ]\
-      || [ -z "${pushDest}" ] ; then
-      exit 1
-    fi
-    echo "You are going to push to ${current_branch}"
-    read -rp "Are you sure?(Yes/No):" confirm
-    if [ "${confirm}" == "Yes" ]; then
-      git push origin "${current_branch}"
-    else
-      echo "If you want push to master, Type 'Yes'"
-    fi
-  else
+  # 自分のリポジトリならブランチに関係なくプッシュ
+  if [ -n "${pushDest}" ]; then
     git push origin "${current_branch}"
+  else
+    if [[ "${current_branch}" =~ (master|release|develop) ]]; then
+      if [ "${safe_guard}" == "true" ]; then
+        echo "Don't allow to push to master, release, develop"
+        exit 1
+      else
+        echo "You are going to push to ${current_branch}"
+        read -rp "Are you sure?(Yes/No):" confirm
+        if [ "${confirm}" == "Yes" ]; then
+          git push origin "${current_branch}"
+        else
+          echo "If you want to push, Type 'Yes'"
+        fi
+      fi
+    else
+      git push origin "${current_branch}"
+    fi
   fi
 }
 
