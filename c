@@ -3,9 +3,15 @@
 
 set -Ceu
 
+usage_text="USAGE: c [COMPILER_OPTIONS] [SOURCE_FILE]"
 if [ "$#" -eq 0 ]; then
-  echo "usage: c {OPTIONS} [SOURCE_FILE]"
+  echo "${usage_text}"
   exit 1
+fi
+
+if [[ $1 =~ (|-|--)help ]]; then
+  echo "${usage_text}"
+  exit 0
 fi
 
 source_file="${!#}"
@@ -16,8 +22,8 @@ filename_without_extension="${source_file%.*}"
 compiler=""
 
 if [ ! -e "${source_file}" ]; then
-  echo "File is not found"
-  echo "usage: c [OPTIONS] [SOURCE_FILE]"
+  echo "File is not found" 1>&2
+  echo "${usage_text}"
   exit 1
 fi
 
@@ -60,7 +66,7 @@ case "${file_extension}" in
   "rkt" ) compiler="raco exe" ;;
   "ts"  ) compiler="tsc" ;;
   "cl" | "lisp" ) compiler="sbcl_compiler" ;;
-  * ) echo "File is not supported"; exit 1 ;;
+  * ) echo "File is not supported" 1>&2; exit 2 ;;
 esac
 
 if [ -n "${compiler}" ]; then
