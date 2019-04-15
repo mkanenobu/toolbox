@@ -17,7 +17,7 @@ if [ ! -f "${sourcefile}" ]; then
   exit 1
 fi
 
-cd "${path}" && ocamlbuild "${filename_wo_ext}.native" 1>/dev/null \
+cd "${path}" && ocamlbuild "${filename_wo_ext}.native" \
   && unlink "${filename_wo_ext}.native" \
   && mv _build/"${filename_wo_ext}.native" ./"${filename_wo_ext}"
 
@@ -25,7 +25,9 @@ if [ -d "_build" ]; then
   rm -r "_build"
 fi
 
-./${filename_wo_ext}
+if [ -x "./${filename_wo_ext}" ]; then
+  ./${filename_wo_ext}
+fi
 
 if [ -x "./${filename_wo_ext}" ]; then
   rm "./${filename_wo_ext}"
