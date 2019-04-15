@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+### ocamlbuild wrapper
+
+if [ ! -f "${1}" ]; then
+  echo "File not found"
+  exit 1
+fi
+
+path="$(dirname "${1}")"
+filename="$(basename "${1}")"
+filename_wo_ext="${filename%.*}"
+cd "${path}" && ocamlbuild "${filename_wo_ext}.native" \
+  && unlink "${filename_wo_ext}.native" \
+  && mv _build/"${filename_wo_ext}.native" ./"${filename_wo_ext}"
+
+if [ -d "_build" ]; then
+  rm -r "_build"
+fi
+
+
