@@ -12,12 +12,14 @@ path="$(dirname "${sourcefile}")"
 filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
 
+options="${@:1:$#-1}"
+
 if [ ! -f "${sourcefile}" ]; then
   echo "File not found"
   exit 1
 fi
 
-cd "${path}" && ocamlbuild "${filename_wo_ext}.native" \
+cd "${path}" && ocamlbuild ${options} "${filename_wo_ext}.native" \
   && unlink "${filename_wo_ext}.native" \
   && mv _build/"${filename_wo_ext}.native" ./"${filename_wo_ext}"
 

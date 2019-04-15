@@ -18,24 +18,16 @@ excutablename="${filename_wo_ext}"
 
 flag_excutablename=false
 
-for opt in "${@:1:$#-1}"; do
-  if ${flag_excutablename}; then
-    excutablename="${opt}"
-    flag_excutablename=false
-  fi
-  case "$opt" in
-    "-o" ) flag_excutablename=true ;;
-  esac
-done
+options="${@:1:$#-1}"
 
 if [ ! -f "${sourcefile}" ]; then
   echo "File not found"
   exit 1
 fi
 
-cd "${path}" && ocamlbuild "${filename_wo_ext}.native" \
+cd "${path}" && ocamlbuild ${options} "${filename_wo_ext}.native" \
   && unlink "${filename_wo_ext}.native" \
-  && mv _build/"${filename_wo_ext}.native" ./"${excutablename}"
+  && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
 
 if [ -d "_build" ]; then
   rm -r "_build"
