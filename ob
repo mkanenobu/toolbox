@@ -16,8 +16,6 @@ filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
 excutablename="${filename_wo_ext}"
 
-flag_excutablename=false
-
 options="${@:1:$#-1}"
 
 if [ ! -f "${sourcefile}" ]; then

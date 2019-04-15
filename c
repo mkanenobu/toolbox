@@ -56,7 +56,7 @@ case "${file_extension}" in
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="${haskell_compiler}" \
     middle_file_extensions="hi";;
-  "ml"  ) compiler="ob" ;;
+  "ml"  ) compiler="ocamlc" ;;
     # options="${options} -o ${filename_without_extension}" ;;
     # middle_file_extensions="cmi cmx" ;;
   "nim" ) compiler="nim c" ;;
