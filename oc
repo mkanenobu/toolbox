@@ -3,7 +3,7 @@
 ### ocamlbuild wrapper
 
 if [[ ${1} =~ (|-|--)help  ]]; then
-  echo "USAGE: oc [OPTIONS] [FILENAME]"
+  echo "USAGE: ob [OPTIONS] [FILENAME]"
   echo "  This script is wrapper of ocamlbuild"
   echo 
   echo "OPTIONS:"
