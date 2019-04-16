@@ -28,5 +28,7 @@ cd "${path}" && ocamlbuild ${options} "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
 
 
-rm -rf _build/${filename_wo_ext}.*
+if [ -d "_build" ]; then
+  rm -rf _build/${filename_wo_ext}.*
+fi
 

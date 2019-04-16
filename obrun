@@ -34,3 +34,7 @@ fi
 if [ -x "./${filename_wo_ext}" ]; then
   rm "./${filename_wo_ext}"
 fi
+
+if [ -d "./_build" ]; then
+  rm -rf _build/${filename_wo_ext}.*
+fi
