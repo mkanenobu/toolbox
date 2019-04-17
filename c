@@ -60,7 +60,8 @@ case "${file_extension}" in
     # options="${options} -o ${filename_without_extension}" ;;
     # middle_file_extensions="cmi cmx" ;;
   "nim" ) compiler="nim c" ;;
-  "pas" ) compiler="fpc" ;;
+  "pas" ) compiler="fpc" \
+    middle_file_extensions="o" ;;
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="$scheme_compiler" ;;
   "rkt" ) compiler="raco exe" ;;
