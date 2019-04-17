@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+commandname="$(basename "${0}")$"
+
+if [ "$#" -lt 2 ]; then
+  echo "USAGE: ${commandname} \"search options\" \"apply command\""
+  exit 1
+elif [ "$#" -gt 2 ]; then
+  echo "USAGE: ${commandname} \"search options\" \"apply command\""
+  echo "  Quote search options and apply command"
+  exit 2
+fi
+
+find_options="${1}"
+apply_command="${2}"
+
+find ${find_options} | xargs ${apply_command}

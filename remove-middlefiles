@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+middle_extensions='o hi cmo cmx cmi'
+
+for e in ${middle_extensions}; do
+  rm -f ./*.${e}
+done
