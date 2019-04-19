@@ -23,12 +23,7 @@ if [ ! -f "${sourcefile}" ]; then
   exit 1
 fi
 
-cd "${path}" && ocamlbuild ${options} "${filename_wo_ext}.native" \
+cd "${path}" && ocamlbuild -lib unix -lib str ${options} "${filename_wo_ext}.native" \
   && unlink "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
-
-
-if [ -d "_build" ]; then
-  rm -rf _build/${filename_wo_ext}.*
-fi
 

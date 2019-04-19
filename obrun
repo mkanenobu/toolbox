@@ -3,7 +3,7 @@
 ### ocamlbuild wrapper
 
 if [[ ${1} =~ (|-|--)help  ]]; then
-  echo "USAGE: ocrun [FILENAME]"
+  echo "USAGE: obrun [OPTIONS] [FILENAME]"
   echo "  This script is wrapper of ocamlbuild"
 fi
 
@@ -11,30 +11,25 @@ sourcefile="${!#}"
 path="$(dirname "${sourcefile}")"
 filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
+excutablename="${filename_wo_ext}"
 
 options="${@:1:$#-1}"
 
-if [ ! -f "${sourcefile}" ]; then
-  echo "File not found"
-  exit 1
-fi
+cd "${path}" && ocamlbuild -lib unix -lib str ${options} "${filename_wo_ext}.native"
 
-cd "${path}" && ocamlbuild ${options} "${filename_wo_ext}.native" \
-  && unlink "${filename_wo_ext}.native" \
-  && mv _build/"${filename_wo_ext}.native" ./"${filename_wo_ext}"
-
-if [ -d "_build" ]; then
-  rm -r "_build"
-fi
-
-if [ -x "./${filename_wo_ext}" ]; then
-  ./${filename_wo_ext}
+if [ -x "./${filename_wo_ext}.native" ]; then
+  ./${filename_wo_ext}.native
 fi
 
 if [ -x "./${filename_wo_ext}" ]; then
   rm "./${filename_wo_ext}"
 fi
 
+if [ -e "${filename_wo_ext}.native" ]; then
+  unlink "${filename_wo_ext}.native"
+fi
+
 if [ -d "./_build" ]; then
   rm -rf _build/${filename_wo_ext}.*
 fi
+
