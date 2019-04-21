@@ -15,7 +15,7 @@ excutablename="${filename_wo_ext}"
 
 options="${@:1:$#-1}"
 
-cd "${path}" && ocamlbuild -lib unix -lib str ${options} "${filename_wo_ext}.native"
+cd "${path}" && ocamlbuild -use-ocamlfind -lib str -pkg core -tag thread ${options} "${filename_wo_ext}.native"
 
 if [ -x "./${filename_wo_ext}.native" ]; then
   ./${filename_wo_ext}.native
