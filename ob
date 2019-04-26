@@ -28,3 +28,10 @@ cd "${path}" && ocamlbuild -use-ocamlfind -pkg core -pkg base -pkg spotlib -tag 
   && unlink "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
 
+if [ -x "_build/${filename_wo_ext}.native" ]; then
+  rm _build/${filename_wo_ext}.native
+fi
+
+if [ -e "_build/${filename_wo_ext}.o" ]; then
+  rm _build/${filename_wo_ext}.o
+fi
