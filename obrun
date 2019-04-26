@@ -8,28 +8,16 @@ if [[ ${1} =~ (|-|--)help  ]]; then
 fi
 
 sourcefile="${!#}"
-path="$(dirname "${sourcefile}")"
 filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
-excutablename="${filename_wo_ext}"
 
-options="${@:1:$#-1}"
+ob "${@}"
 
-cd "${path}" && ocamlbuild -use-ocamlfind -pkg core -pkg base -pkg spotlib -tag thread ${options} "${filename_wo_ext}.native"
-
-if [ -x "./${filename_wo_ext}.native" ]; then
-  ./${filename_wo_ext}.native
+if [ -x "./${filename_wo_ext}" ]; then
+  ./${filename_wo_ext}
 fi
 
 if [ -x "./${filename_wo_ext}" ]; then
   rm "./${filename_wo_ext}"
-fi
-
-if [ -e "${filename_wo_ext}.native" ]; then
-  unlink "${filename_wo_ext}.native"
-fi
-
-if [ -d "./_build" ]; then
-  rm -rf _build/${filename_wo_ext}.*
 fi
 
