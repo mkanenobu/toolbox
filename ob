@@ -24,7 +24,7 @@ if [ ! -f "${sourcefile}" ]; then
   exit 1
 fi
 
-cd "${path}" && ocamlbuild -use-ocamlfind -lib str -pkg core -tag thread ${options} "${filename_wo_ext}.native" \
+cd "${path}" && ocamlbuild -use-ocamlfind -pkg core -pkg base -pkg spotlib -tag thread ${options} "${filename_wo_ext}.native" \
   && unlink "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
 
