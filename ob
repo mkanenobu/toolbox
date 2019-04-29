@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 ### ocamlbuild wrapper
 
 if [[ ${1} =~ (|-|--)help  ]]; then
@@ -24,9 +23,16 @@ if [ ! -f "${sourcefile}" ]; then
   exit 1
 fi
 
-cd "${path}" && ocamlbuild -use-ocamlfind -r -pkg base -pkg spotlib -pkg core -tag thread ${options} "${filename_wo_ext}.native" \
-  && unlink "${filename_wo_ext}.native" \
+cd "${path}" && ocamlbuild -cflag "-annot" \
+  -use-ocamlfind -r -pkg core -tag thread ${options} "${filename_wo_ext}.native"
+
+if [ "$?" -eq 0 ]; then
+  unlink "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
+else
+  ocamlbuild -clean
+fi
+
 
 if [ -x "_build/${filename_wo_ext}.native" ]; then
   rm _build/${filename_wo_ext}.native
