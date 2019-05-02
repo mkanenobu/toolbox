@@ -16,24 +16,43 @@ filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
 excutablename="${filename_wo_ext}"
 
-options="${@:1:$#-1}"
+options=""
 
 if [ ! -f "${sourcefile}" ]; then
   echo "File not found"
   exit 1
 fi
 
+# -o option parser
+counter=1
+output_file_flg=0
+for e in "$@"; do
+  if [ "${counter}" -eq "$#" ]; then
+    break
+  elif [ "$e" == "-o" ]; then
+    output_file_flg=1
+  elif [ "${output_file_flg}" -eq 1 ]; then
+    excutablename="$e"
+  else
+    options="${options} ${e}"
+  fi
+  counter=$((counter + 1))
+done
+
+# build
 cd "${path}" && ocamlbuild -cflag "-annot" \
-  -use-ocamlfind -r -pkg core -tag thread ${options} "${filename_wo_ext}.native"
+  -use-ocamlfind -r -pkg core -lib str \
+  -tag thread ${options} "${filename_wo_ext}.native"
 
 if [ "$?" -eq 0 ]; then
   unlink "${filename_wo_ext}.native" \
   && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
 else
+  # clean if build failed
   ocamlbuild -clean
 fi
 
-
+# clean files
 if [ -x "_build/${filename_wo_ext}.native" ]; then
   rm _build/${filename_wo_ext}.native
 fi
