@@ -40,9 +40,11 @@ for e in "$@"; do
 done
 
 # build
-cd "${path}" && ocamlbuild -cflag "-annot" \
-  -use-ocamlfind -r -pkg core -lib str \
-  -tag thread ${options} "${filename_wo_ext}.native"
+cd "${path}" && ocamlbuild \
+  -use-ocamlfind \
+  -r -pkg core -lib str \
+  -tag thread -tag native \
+  ${options} "${filename_wo_ext}.native"
 
 if [ "$?" -eq 0 ]; then
   unlink "${filename_wo_ext}.native" \
