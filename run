@@ -48,10 +48,10 @@ else
     "rs"  ) runner="rustc -o ${exec_file}"; compile_flg=1 ;;
     "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}"; compile_flg=1 ;;
     "pas" ) runner="fpc -o${exec_file}"; compile_flg=1 ;;
+    "ml"  ) runner="ob -o ${exec_file}"; compile_flg=1 ;;
 
     "go"  ) runner="go run" ;;
     "hs"  ) runner="$(if [ "${haskell_stack}" ]; then echo "stack "; fi) runghc" ;;
-    "ml"  ) runner="ocrun" ;;
     "sh"  ) runner="sh" ;;
     "bash") runner="bash" ;;
     "php" ) runner="php" ;;
@@ -65,17 +65,31 @@ else
   esac
 fi
 
-if [ -n "${runner}" ] && [ "${compile_flg}" -eq 0 ]; then
-  eval "${runner} ${source_file} ${args}"
-elif [ "${compile_flg}" -eq 1 ]; then
-  if [ ! -d "${tmp_dir}" ]; then
-    mkdir -p "${tmp_dir}"
+# Catch SIGINT then remove tmp_dir
+trap 'clear_tmp' {1,2,3,15}
+
+function clear_tmp() {
+  if [ -e "${tmp_dir}" ]; then
+    rm -r "${tmp_dir}"
   fi
-  eval "${runner} ${source_file}" && \
-    chmod +x "${exec_file}" && \
-    ${exec_file} "${args}"
-  rm -r /tmp/runner
-else
-  echo "Error occurred!"
-  exit 1
-fi
+}
+
+function script_run() {
+  if [ -n "${runner}" ] && [ "${compile_flg}" -eq 0 ]; then
+    eval "${runner} ${source_file} ${args}"
+  elif [ "${compile_flg}" -eq 1 ]; then
+    if [ ! -e "${tmp_dir}" ]; then
+      mkdir -p "${tmp_dir}"
+    fi
+    eval "${runner} ${source_file}" && \
+      chmod +x "${exec_file}" && \
+      ${exec_file} "${args}"
+    clear_tmp
+  else
+    echo "Error occurred!"
+    exit 1
+  fi
+}
+
+script_run
+

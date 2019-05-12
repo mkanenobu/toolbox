@@ -11,7 +11,7 @@ sourcefile="${!#}"
 filename="$(basename "${sourcefile}")"
 filename_wo_ext="${filename%.*}"
 
-ob "${@}"
+ob -quiet "${@}"
 
 if [ -x "./${filename_wo_ext}" ]; then
   ./${filename_wo_ext}

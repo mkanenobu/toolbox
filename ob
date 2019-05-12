@@ -48,7 +48,7 @@ cd "${path}" && ocamlbuild \
 
 if [ "$?" -eq 0 ]; then
   unlink "${filename_wo_ext}.native" \
-  && cp _build/"${filename_wo_ext}.native" ./"${excutablename}"
+  && cp _build/"${filename_wo_ext}.native" "${excutablename}"
 else
   # clean if build failed
   ocamlbuild -clean
