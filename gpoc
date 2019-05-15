@@ -12,7 +12,7 @@ gpoc(){
   # 自分のリポジトリならmasterでもプッシュ
   if [ -n "${pushDest}" ]; then
     if [ -n "${following_branch}" ]; then
-      git push "${following_branch}"
+      git push origin "${following_branch}"
     else
       git push origin "${current_branch}"
     fi
