@@ -5,33 +5,35 @@ gpoc(){
   # Prevent push to "master" option
   safe_guard="true"
   current_branch="$(git symbolic-ref --short HEAD)"
-  pushDest="$(git remote show origin | grep "mkanenobu")"
+  push_dest="$(git remote show origin | grep "mkanenobu")"
   following_branch="$(git branch -vv | \
     cut -d[ -f2 | cut -d] -f1 | cut -d: -f1 | cut -d/ -f2)"
-  echo "Push to ${current_branch}"
-  # 自分のリポジトリならmasterでもプッシュ
-  if [ -n "${pushDest}" ]; then
-    if [ -n "${following_branch}" ]; then
-      git push origin "${following_branch}"
-    else
-      git push origin "${current_branch}"
-    fi
+  # following branchが存在する場合そこにプッシュ
+  push_name="${current_branch}"
+  if [ -n "${following_branch}" ]; then
+    push_name="${following_branch}"
+  fi
+  echo "Push to ${push_name}"
+  # 自分のリポジトリならプッシュ先関係なくでもプッシュ
+  if [ -n "${push_dest}" ]; then
+    git push origin "${push_name}"
   else
-    if [[ "${current_branch}" =~ (master|release|develop) ]]; then
+    # 自分のリポジトリではなく、プッシュ先の名前にmaster,release,developが含まれるときは確認
+    if [[ "${push_name}" =~ (master|release|develop) ]]; then
       if [ "${safe_guard}" == "true" ]; then
         echo "Don't allow to push to master, release, develop"
         exit 1
       else
-        echo "You are going to push to ${current_branch}"
-        read -rp "Are you sure?(Yes/No):" confirm
-        if [ "${confirm}" == "Yes" ]; then
-          git push origin "${current_branch}"
+        echo "You are going to push to ${push_name}"
+        read -rp "Are you sure? (type 'Agree'):" confirm
+        if [ "${confirm}" == "Agree" ]; then
+          git push origin "${push_name}"
         else
-          echo "If you want to push, Type 'Yes'"
+          echo "If you want to push, Type 'Agree'"
         fi
       fi
     else
-      git push origin "${current_branch}"
+      git push origin "${push_name}"
     fi
   fi
 }
