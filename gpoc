@@ -6,12 +6,12 @@ gpoc(){
   safe_guard="true"
   current_branch="$(git symbolic-ref --short HEAD)"
   pushDest="$(git remote show origin | grep "mkanenobu")"
-  following_branch="$(git branch -vv | cut -d[ -f2 | cut -d] -f1 | cut -d/ -f2)"
+  following_branch="$(git branch -vv | cut -d[ -f2 | cut -d] -f1 | cut -d: -f1)"
   echo "Push to ${current_branch}"
   # 自分のリポジトリならmasterでもプッシュ
   if [ -n "${pushDest}" ]; then
     if [ -n "${following_branch}" ]; then
-      git push origin "${following_branch}"
+      git push "${following_branch}"
     else
       git push origin "${current_branch}"
     fi
