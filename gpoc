@@ -1,15 +1,20 @@
 #!/bin/bash
-## git push origin current branch
+## git push current branch name
 
 gpoc(){
   # Prevent push to "master" option
   safe_guard="true"
-  current_branch="$(git branch | grep \* | sed -e "s/\*\ //")"
+  current_branch="$(git symbolic-ref --short HEAD)"
   pushDest="$(git remote show origin | grep "mkanenobu")"
+  following_branch="$(git branch -vv | cut -d[ -f2 | cut -d] -f1)"
   echo "Push to ${current_branch}"
-  # 自分のリポジトリならブランチに関係なくプッシュ
+  # 自分のリポジトリならmasterでもプッシュ
   if [ -n "${pushDest}" ]; then
-    git push origin "${current_branch}"
+    if [ -n "${following_branch}" ]; then
+      git push "${following_branch}"
+    else
+      git push origin "${current_branch}"
+    fi
   else
     if [[ "${current_branch}" =~ (master|release|develop) ]]; then
       if [ "${safe_guard}" == "true" ]; then
