@@ -53,6 +53,7 @@ forth_runner="gforth"
 
 shebang="$(head -n 1 "${source_file}")"
 
+# FIXME: shebangがこのスクリプトの場合、無限ループ？
 if [[ "${shebang}" =~ ^\#\!/ ]]; then
   runner="${shebang//\#\!/}"
 else
