@@ -62,6 +62,7 @@ case "${file_extension}" in
   "nim" ) compiler="nim c" ;;
   "pas" ) compiler="fpc" \
     middle_file_extensions="o" ;;
+  "zig" ) compiler="zig build-exe" ;;
   "ros" ) compiler="ros build" ;;
   "scm" ) compiler="$scheme_compiler" ;;
   "rkt" ) compiler="raco exe" ;;

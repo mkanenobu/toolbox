@@ -53,6 +53,7 @@ else
 
     "go"  ) runner="go run" ;;
     "hs"  ) runner="$(if [ "${haskell_stack}" ]; then echo "stack "; fi) runghc" ;;
+    "zig" ) runner="zig run" ;;
     "sh"  ) runner="sh" ;;
     "bash") runner="bash" ;;
     "php" ) runner="php" ;;
