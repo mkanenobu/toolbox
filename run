@@ -3,9 +3,19 @@
 
 set -Ceu
 
+VERSION="0.1.0"
+usage_text="usage: run [SOURCE_FILE] [ARGUMENTS]"
 if [ "$#" -eq 0 ]; then
-  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
+  echo "${usage_text}"
   exit 1
+fi
+
+if [[ $1 =~ (-|--)(h|help) ]]; then
+  echo "${usage_text}"
+  exit 0
+elif [[ $1 =~ (-|--)(v|version) ]]; then
+  echo "Version: ${VERSION}"
+  exit 0
 fi
 
 source_file="${1}"
@@ -13,20 +23,24 @@ args="${@:2}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 tmp_dir="/tmp/runner"
 exec_file="${tmp_dir}/a.out"
-compile_flg=0
+needs_copile_flg=0
 
 runner=""
 
-if [[ "${source_file}" =~ (-h|--help) ]]; then
-  echo "usage: run [SOURCE_FILE] [ARGUMENTS]"
-  exit
-fi
+# C-lang
+[ "$(which clang)" ] && c_compiler="clang" \
+  || [ "$(which gcc)" ] && c_compiler="gcc" \
+  || c_compiler="cc"
 
-# available processing system
-[ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
-[ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
+# C++
+[ "$(which clang++)" ] && cpp_compiler="clang++" \
+  || [ "$(which g++)" ] && cpp_compiler="g++" \
+  || cpp_compiler="c++"
+
+# Scheme
 [ "$(which scheme)" ] && scheme_runner="scheme --quiet < " \
   || [ "$(which gosh)" ] && scheme_runner="gosh" \
+
 lisp_runner="sbcl --script"
 forth_runner="gforth"
 
@@ -44,12 +58,12 @@ if [[ "${shebang}" =~ ^\#\!/ ]]; then
 else
   case "${file_extension}" in
     # need to compile
-    "c"   ) runner="${c_compiler} -o ${exec_file}"; compile_flg=1 ;;
-    "cpp" ) runner="${cpp_compiler} -o ${exec_file}"; compile_flg=1 ;;
-    "rs"  ) runner="rustc -o ${exec_file}"; compile_flg=1 ;;
-    "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}"; compile_flg=1 ;;
-    "pas" ) runner="fpc -o${exec_file}"; compile_flg=1 ;;
-    "ml"  ) runner="ob -o ${exec_file}"; compile_flg=1 ;;
+    "c"   ) runner="${c_compiler} -o ${exec_file}"; needs_copile_flg=1 ;;
+    "cpp" ) runner="${cpp_compiler} -o ${exec_file}"; needs_copile_flg=1 ;;
+    "rs"  ) runner="rustc -o ${exec_file}"; needs_copile_flg=1 ;;
+    "nim" ) runner="nim c -o:${exec_file} --nimcache:${tmp_dir}"; needs_copile_flg=1 ;;
+    "pas" ) runner="fpc -o${exec_file}"; needs_copile_flg=1 ;;
+    "ml"  ) runner="ob -o ${exec_file}"; needs_copile_flg=1 ;;
 
     "go"  ) runner="go run" ;;
     "hs"  ) runner="$(if [ "${haskell_stack}" ]; then echo "stack "; fi) runghc" ;;
@@ -79,9 +93,9 @@ function clear_tmp() {
 }
 
 function main() {
-  if [ -n "${runner}" ] && [ "${compile_flg}" -eq 0 ]; then
+  if [ -n "${runner}" ] && [ "${needs_copile_flg}" -eq 0 ]; then
     eval "${runner} ${source_file} ${args}"
-  elif [ "${compile_flg}" -eq 1 ]; then
+  elif [ "${needs_copile_flg}" -eq 1 ]; then
     if [ ! -e "${tmp_dir}" ]; then
       mkdir -p "${tmp_dir}"
     fi

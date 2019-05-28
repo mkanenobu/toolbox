@@ -3,14 +3,20 @@
 
 set -Ceu
 
+VERSION="0.1.0"
+
 usage_text="USAGE: c [COMPILER_OPTIONS] [SOURCE_FILE]"
+
 if [ "$#" -eq 0 ]; then
   echo "${usage_text}"
   exit 1
 fi
 
-if [[ $1 =~ (|-|--)help ]]; then
+if [[ $1 =~ (-|--)(h|help) ]]; then
   echo "${usage_text}"
+  exit 0
+elif [[ $1 =~ (-|--)(v|version) ]]; then
+  echo "Version: ${VERSION}"
   exit 0
 fi
 
@@ -18,61 +24,76 @@ source_file="${!#}"
 options="${@:1:$#-1}"
 file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 filename_without_extension="${source_file%.*}"
-# no_extension="$(echo "${source_file}" | )"
 compiler=""
+compile_argument=""
+compiler_not_found=0
 
 if [ ! -e "${source_file}" ]; then
-  echo "File is not found" 1>&2
+  echo "Source file is not found" 1>&2
   echo "${usage_text}"
   exit 1
 fi
 
-scheme_compiler="csc"
 sbcl_compiler(){
   echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${source_file}" && \
     chmod +x "$(echo "${source_file}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
 }
-[ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
-[ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
-[ "$(which stack)" ] && haskell_compiler="stack ghc -- " || haskell_compiler="ghc"
 
-# user_setting="${XDG_CONFIG_HOME}/compile/user_setting"
-# if [ -e "${user_setting}" ]; then
-#   source "${user_setting}"
-# fi
+# C-lang
+[ "$(which clang)" ] && c_compiler="clang" \
+  || [ "$(which gcc)" ] && c_compiler="gcc" \
+  || c_compiler="cc"
 
-c_compiler="clang"
-cpp_compiler="clang++"
-d_compiler="gdc"
+# C++
+[ "$(which clang++)" ] && cpp_compiler="clang++" \
+  || [ "$(which g++)" ] && cpp_compiler="g++" \
+  || cpp_compiler="c++"
+
+# D-lang
+[ "$(which dmd)" ] && d_compiler="dmd" \
+  || [ "$(which gdc)" ] && d_compiler="gdc" \
+  || [ "$(which ldc)" ] && d_compiler="ldc" \
+  || compiler_not_found=1
+
+# Haskell (exists stask?)
+[ "$(which stack)" ] && compile_argument="ghc --"; haskell_compiler="stack" \
+  || [ "$(which ghc)" ] && haskell_compiler="ghc" \
+  || compiler_not_found=1
+
+# remove when compile finished
 middle_file_extensions=""
 
 case "${file_extension}" in
-  "c"   ) compiler="$c_compiler" \
+  "c"   ) compiler="${c_compiler}" \
     options="${options} -o ${filename_without_extension}" ;;
   "cpp" ) compiler="$cpp_compiler" \
     options="${options} -o ${filename_without_extension}" ;;
-  "d"   ) compiler="$d_compiler" ;;
-  "go"  ) compiler="go build" ;;
+  "d"   ) compiler="${d_compiler}" ;;
+  "go"  ) compiler="go"; compile_argument="build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="${haskell_compiler}" \
     middle_file_extensions="hi";;
   "ml"  ) compiler="ob" ;;
     # options="${options} -o ${filename_without_extension}" ;;
     # middle_file_extensions="cmi cmx" ;;
-  "nim" ) compiler="nim c" ;;
+  "nim" ) compiler="nim"; compile_argument="c" ;;
   "pas" ) compiler="fpc" \
     middle_file_extensions="o" ;;
-  "zig" ) compiler="zig build-exe" ;;
-  "ros" ) compiler="ros build" ;;
-  "scm" ) compiler="$scheme_compiler" ;;
-  "rkt" ) compiler="raco exe" ;;
+  "zig" ) compiler="zig"; compile_argument="build-exe"  ;;
+  "scm" ) compiler="csc" ;;
+  "rkt" ) compiler="raco"; compile_argument="exe" ;;
   "ts"  ) compiler="tsc" ;;
   "cl" | "lisp" ) compiler="sbcl_compiler" ;;
-  * ) echo "File is not supported" 1>&2; exit 2 ;;
+  * ) echo "Filetype is not supported" 1>&2; exit 2 ;;
 esac
 
+if [ ! "$(which ${compiler})" ] || [ 1 -eq "$(compiler_not_found)" ]; then
+  echo "Compiler (${compiler}) is not found"
+  exit 3
+fi
+
 if [ -n "${compiler}" ]; then
-  eval "${compiler} ${options} ${source_file}"
+  eval "${compiler} ${compile_argument} ${options} ${source_file}"
 fi
 
 if [ -e "${filename_without_extension}.o" ]; then
