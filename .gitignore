@@ -3,3 +3,5 @@ nimcache
 git_autofetch
 timer
 ./available_fonts
+_build
+ratio

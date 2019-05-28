@@ -14,6 +14,7 @@ file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 tmp_dir="/tmp/runner"
 exec_file="${tmp_dir}/a.out"
 compile_flg=0
+
 runner=""
 
 if [[ "${source_file}" =~ (-h|--help) ]]; then
@@ -21,11 +22,11 @@ if [[ "${source_file}" =~ (-h|--help) ]]; then
   exit
 fi
 
+# available processing system
 [ "$(which clang)" ] && c_compiler="clang" || c_compiler="gcc"
 [ "$(which clang++)" ] && cpp_compiler="clang++" || cpp_compiler="g++"
-[ "$(which gosh)" ] && scheme_runner="gosh" \
-  || [ "$(which scheme)" ] && scheme_runner="scheme --quiet < " \
-  || [ "$(which racket)" ] && scheme_runner="racket -r"
+[ "$(which scheme)" ] && scheme_runner="scheme --quiet < " \
+  || [ "$(which gosh)" ] && scheme_runner="gosh" \
 lisp_runner="sbcl --script"
 forth_runner="gforth"
 
@@ -58,14 +59,16 @@ else
     "py"  ) runner="python3" ;;
     "rb"  ) runner="ruby" ;;
     "lua" ) runner="lua" ;;
+    "js"  ) runner="node" ;;
     "fs" | "fth"  ) runner="${forth_runner}"; args="${args} -e bye";;
-    "scm" | "rkt" ) runner="${scheme_runner}" ;;
+    "scm" ) runner="${scheme_runner}" ;;
+    "rkt" ) runner="racket -r" ;;
     "cl" | "lisp" ) runner="${lisp_runner}" ;;
     * ) echo "File is not supported"; exit 1 ;;
   esac
 fi
 
-# Catch SIGINT then remove tmp_dir
+# Catch SIGINT then clean tmp_dir
 trap 'clear_tmp' {1,2,3,15}
 
 function clear_tmp() {
@@ -74,7 +77,7 @@ function clear_tmp() {
   fi
 }
 
-function script_run() {
+function main() {
   if [ -n "${runner}" ] && [ "${compile_flg}" -eq 0 ]; then
     eval "${runner} ${source_file} ${args}"
   elif [ "${compile_flg}" -eq 1 ]; then
@@ -91,5 +94,5 @@ function script_run() {
   fi
 }
 
-script_run
+main
 
