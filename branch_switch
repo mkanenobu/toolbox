@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+{
 
+git fetch
 dest_branch="$(git branch -a | fzf)"
 dest_branch="${dest_branch//\ /}"
 
@@ -16,3 +18,5 @@ elif [[ "${dest_branch}" =~ \* ]]; then
 else
   git checkout "${dest_branch}"
 fi
+
+}

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 ### ocamlbuild wrapper
+{
 
 if [[ ${1} =~ (|-|--)help  ]]; then
   echo "USAGE: ob [OPTIONS] [FILENAME]"
@@ -62,3 +63,5 @@ fi
 if [ -e "_build/${filename_wo_ext}.o" ]; then
   rm _build/${filename_wo_ext}.o
 fi
+
+}
