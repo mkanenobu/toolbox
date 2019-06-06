@@ -5,6 +5,10 @@ git fetch
 dest_branch="$(git branch -a | fzf)"
 dest_branch="${dest_branch//\ /}"
 
+if [ -z "${dest_branch}" ]; then
+  exit 1
+fi
+
 if [[ "${dest_branch}" =~ \* ]]; then
   echo "Already in the branch"
 fi
