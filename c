@@ -26,7 +26,7 @@ file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 filename_without_extension="${source_file%.*}"
 compiler=""
 compile_argument=""
-compiler_not_found=0
+compiler_not_found=false
 
 if [ ! -e "${source_file}" ]; then
   echo "Source file is not found" 1>&2
@@ -39,36 +39,30 @@ sbcl_compiler(){
     chmod +x "$(echo "${source_file}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
 }
 
-# C-lang
-[ "$(which clang)" ] && c_compiler="clang" \
-  || [ "$(which gcc)" ] && c_compiler="gcc" \
-  || c_compiler="cc"
-
-# C++
-[ "$(which clang++)" ] && cpp_compiler="clang++" \
-  || [ "$(which g++)" ] && cpp_compiler="g++" \
-  || cpp_compiler="c++"
-
-# D-lang
-[ "$(which dmd)" ] && d_compiler="dmd" \
-  || [ "$(which gdc)" ] && d_compiler="gdc" \
-  || [ "$(which ldc)" ] && d_compiler="ldc" \
-  || compiler_not_found=1
-
 # Haskell (exists stask?)
-[ "$(which stack)" ] && compile_argument="ghc --"; haskell_compiler="stack" \
-  || [ "$(which ghc)" ] && haskell_compiler="ghc" \
-  || compiler_not_found=1
+[ "$(type stack)" ] && compile_argument="ghc --"; haskell_compiler="stack" \
+  || [ "$(type ghc)" ] && haskell_compiler="ghc" \
+  || compiler_not_found=true
 
 # remove when compile finished
 middle_file_extensions=""
 
 case "${file_extension}" in
-  "c"   ) compiler="${c_compiler}" \
+  "c"   ) compiler="$( \
+             [ "$(type clang)" ] && "clang" \
+          || [ "$(type gcc)" ] && "gcc" \
+          || "cc")"
     options="${options} -o ${filename_without_extension}" ;;
-  "cpp" ) compiler="$cpp_compiler" \
+  "cpp" ) compiler="$( \
+             [ "$(type clang++)" ] && "clang++" \
+          || [ "$(type g++)" ] && "g++" \
+          || "c++")"
     options="${options} -o ${filename_without_extension}" ;;
-  "d"   ) compiler="${d_compiler}" ;;
+  "d"   ) compiler="$( \
+             [ "$(type dmd)" ] && "dmd" \
+          || [ "$(type gdc)" ] && "gdc" \
+          || [ "$(type ldc)" ] && "ldc" \
+          || compiler_not_found=true)";;
   "go"  ) compiler="go"; compile_argument="build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="${haskell_compiler}" \
@@ -87,7 +81,7 @@ case "${file_extension}" in
   * ) echo "Filetype is not supported" 1>&2; exit 2 ;;
 esac
 
-if [ ! "$(which ${compiler})" ] || [ 1 -eq "$(compiler_not_found)" ]; then
+if [ ${compiler_not_found} ]; then
   echo "Compiler (${compiler}) is not found"
   exit 3
 fi
