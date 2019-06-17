@@ -26,7 +26,7 @@ file_extension="$(echo "${source_file}" | sed 's/^.*\.\([^\.]*\)$/\1/')"
 filename_without_extension="${source_file%.*}"
 compiler=""
 compile_argument=""
-compiler_not_found=false
+compiler_not_found="false"
 
 if [ ! -e "${source_file}" ]; then
   echo "Source file is not found" 1>&2
@@ -42,7 +42,7 @@ sbcl_compiler(){
 # Haskell (exists stask?)
 [ "$(type stack)" ] && compile_argument="ghc --"; haskell_compiler="stack" \
   || [ "$(type ghc)" ] && haskell_compiler="ghc" \
-  || compiler_not_found=true
+  || compiler_not_found="true"
 
 # remove when compile finished
 middle_file_extensions=""
@@ -62,7 +62,7 @@ case "${file_extension}" in
              [ "$(type dmd)" ] && "dmd" \
           || [ "$(type gdc)" ] && "gdc" \
           || [ "$(type ldc)" ] && "ldc" \
-          || compiler_not_found=true)";;
+          || compiler_not_found="true")";;
   "go"  ) compiler="go"; compile_argument="build" ;;
   "rs"  ) compiler="rustc" ;;
   "hs"  ) compiler="${haskell_compiler}" \
@@ -81,7 +81,7 @@ case "${file_extension}" in
   * ) echo "Filetype is not supported" 1>&2; exit 2 ;;
 esac
 
-if [ ${compiler_not_found} ]; then
+if [ "${compiler_not_found}" == "true" ]; then
   echo "Compiler (${compiler}) is not found"
   exit 3
 fi
