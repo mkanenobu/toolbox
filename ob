@@ -5,12 +5,18 @@
 
 set -Ceu
 
-if [[ ${1} =~ (|-|--)help  ]]; then
-  echo "USAGE: ob [OPTIONS] [FILENAME]"
-  echo "  This script is wrapper of ocamlbuild"
-  echo 
-  echo "OPTIONS:"
-  echo "  -o: Output file name"
+if [ $# -eq 0 ]; then
+  exit 1
+elif [[ ${1} =~ (|-|--)(h|help)  ]]; then
+  cat << EOL
+USAGE: ob [OPTIONS] [FILENAME]
+  This script is wrapper of ocamlbuild
+
+OPTIONS:
+  -o: Output file name
+  -h, -help: Show this help
+EOL
+  exit 2
 fi
 
 sourcefile="${!#}"
