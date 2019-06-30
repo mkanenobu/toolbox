@@ -1,5 +1,8 @@
 #!/bin/bash
+
+if [ $# -eq 0 ]; then
+  exit 1
+fi
 source_file="$1"
-nim c -r --verbosity:0 --hints:off "$source_file"
+nim c -r --verbosity:0 "$source_file"
 rm "${source_file/.nim/}"
-rm -rf ./nimcache

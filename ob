@@ -2,6 +2,8 @@
 
 ### ocamlbuild wrapper
 
+set -Ceu
+
 if [[ ${1} =~ (|-|--)help  ]]; then
   echo "USAGE: ob [OPTIONS] [FILENAME]"
   echo "  This script is wrapper of ocamlbuild"

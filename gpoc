@@ -6,9 +6,6 @@ gpoc(){
   safe_guard="true"
   current_branch="$(git symbolic-ref --short HEAD)"
   push_dest="$(git remote show origin | grep "mkanenobu")"
-  following_branch="$(git branch -vv | \
-    cut -d[ -f2 | cut -d] -f1 | cut -d: -f1 | cut -d/ -f2)"
-  # following branchが存在する場合そこにプッシュ
   push_name="${current_branch}"
   if [ -n "${following_branch}" ]; then
     push_name="${following_branch}"
