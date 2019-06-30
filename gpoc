@@ -5,14 +5,15 @@ gpoc(){
   # Prevent push to "master" option
   safe_guard="true"
   current_branch="$(git symbolic-ref --short HEAD)"
+  echo "Current branch is ${current_branch}"
   push_dest="$(git remote show origin | grep "mkanenobu")"
   push_name="${current_branch}"
   if [ -n "${following_branch}" ]; then
     push_name="${following_branch}"
   fi
-  echo "Push to ${push_name}"
   # 自分のリポジトリならプッシュ先関係なくでもプッシュ
   if [ -n "${push_dest}" ]; then
+    echo "Push to ${push_name}"
     git push origin "${push_name}"
   else
     # 自分のリポジトリではなく、プッシュ先の名前にmaster,release,developが含まれるときは確認
@@ -24,6 +25,7 @@ gpoc(){
         echo "You are going to push to ${push_name}"
         read -rp "Are you sure? (type 'Agree'):" confirm
         if [ "${confirm}" == "Agree" ]; then
+          echo "Push to ${push_name}"
           git push origin "${push_name}"
         else
           echo "If you want to push, Type 'Agree'"

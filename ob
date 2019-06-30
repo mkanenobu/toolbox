@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 ### ocamlbuild wrapper
+{
 
 set -Ceu
 
@@ -64,3 +65,5 @@ fi
 if [ -e "_build/${filename_wo_ext}.o" ]; then
   rm _build/${filename_wo_ext}.o
 fi
+
+}
