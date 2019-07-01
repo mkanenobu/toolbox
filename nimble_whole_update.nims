@@ -18,7 +18,7 @@ let update_available_packages = out_lines.mapIt(it.split[0])
                                          .filter(proc(x: string): bool = x != "")
 
 if update_available_packages.len == 0:
-  echo "Packages are not found"
+  echo "Packages are not installed"
   quit 3
 
 echo "Update following packages"

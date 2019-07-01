@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-const args = process.argv.splice(2)
+let str = process.argv.splice(2).join(' ')
+if (str.length === 0) {
+  str = require('fs').readFileSync('/dev/stdin', 'utf-8')
+}
 
-args.forEach(arg => {
-  console.log(encodeURIComponent(arg))
-})
+console.log(encodeURIComponent(str))
+
