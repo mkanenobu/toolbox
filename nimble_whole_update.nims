@@ -7,14 +7,19 @@ import strutils, sequtils, strformat
 let (output1, exit_code1) = gorgeEx("nimble update")
 if exit_code1 != 0:
   echo output1
-  quit(1)
+  quit 1
 let (output2, exit_code2) = gorgeEx("nimble list --installed")
 if exit_code2 != 0:
   echo output2
-  quit(1)
+  quit 2
 
-let out_lines = splitLines(output)
+let out_lines = splitLines(output2)
 let update_available_packages = out_lines.mapIt(it.split[0])
+                                         .filter(proc(x: string): bool = x != "")
+
+if update_available_packages.len == 0:
+  echo "Packages are not found"
+  quit 3
 
 echo "Update following packages"
 echo "$1" % [update_available_packages.join(", ")]
