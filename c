@@ -1,6 +1,8 @@
 #!/bin/bash
 ### Switch compiler for each file type
 
+# WIP
+
 set -Ceu
 
 VERSION="0.1.0"

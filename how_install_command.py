@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# WIP
+
 import os
 import platform
 import re
@@ -9,7 +11,9 @@ import sys
 package_manager = {
     "centos": ["yum"],
     "ubuntu": ["apt", "apt-get", "snap"],
+    "fedora": ["dnf"],
     "arch": ["pacman"],
+    "osx": ["brew", "macport"],
     "ruby": ["gem"],
     "python": ["pip"],
     "perl": ["cpan"],
@@ -29,7 +33,7 @@ def exec_cmd(cmd):
     return subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode().strip()
 
 
-def which_cmd(cmd_name):
+def which(cmd_name):
     return exec_cmd(["which", cmd_name])
 
 
@@ -52,7 +56,7 @@ elif "is aliased" in type_result:
 
 # OSX: *env, package manager, brew, macport, os built-in, build from source
 if distribution == "osx":
-    res = which_cmd(dest_cmd)
+    res = which(dest_cmd)
     fullpath = os.path.join(os.path.dirname(res), dest_cmd)
 
     # *env
