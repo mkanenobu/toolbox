@@ -1,9 +1,14 @@
-nimre
 nimcache
+
+.merlin
+_build
+*cache*
+
+# binary
+a.out
+nimre
 git_autofetch
 timer
-./available_fonts
-_build
 ratio
-a.out
-*cache*
+available_fonts
+zangyo_time
