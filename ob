@@ -7,7 +7,7 @@ set -Ceu
 
 if [ $# -eq 0 ]; then
   exit 1
-elif [[ ${1} =~ (|-|--)(h|help)  ]]; then
+elif [[ ${1} =~ (-h|--help)  ]]; then
   cat << EOL
 USAGE: ob [OPTIONS] [FILENAME]
   This script is wrapper of ocamlbuild
@@ -32,7 +32,7 @@ if [ ! -f "${sourcefile}" ]; then
   exit 1
 fi
 
-# -o option parser
+# options parser
 counter=1
 output_file_flg=0
 for e in "$@"; do

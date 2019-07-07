@@ -1,7 +1,6 @@
 open Printf
 
-
-let seconds_from_start_of_today (hour, minute) =
+let seconds_from_zero_o_clock (hour, minute) =
   hour * 3600 + minute * 60
 
 let string_of_seconds seconds =
@@ -17,7 +16,7 @@ let now =
 
 (* TODO: APIで始業時間を取得 *)
 let syukkin str =
-  let pattern = Str.regexp "[0-9][0-9][0-9][0-9]" in
+  let pattern = "[0-9][0-9][0-9][0-9]" |> Str.regexp in
   if not (Str.string_match pattern str 0) then (
     printf "Invalid format\n";
     exit 2
@@ -35,7 +34,7 @@ let () =
     printf "COMMAND [4digits]\n";
     exit 1
   );
-  let syukkin_time = seconds_from_start_of_today @@ syukkin Sys.argv.(1) in
-  let now_time = seconds_from_start_of_today now in
+  let syukkin_time = syukkin Sys.argv.(1) |> seconds_from_zero_o_clock in
+  let now_time = now |> seconds_from_zero_o_clock in
   printf "%s\n" @@ string_of_seconds (now_time - syukkin_time - working_seconds)
 
