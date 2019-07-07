@@ -9,12 +9,10 @@ let string_of_seconds seconds =
   else
     sprintf "%d hours, %d minutes" (seconds / 3600) (seconds mod 3600 / 60)
 
-
 let now =
   let now = Unix.localtime @@ Unix.time () in
   now.tm_hour, now.tm_min
 
-(* TODO: APIで始業時間を取得 *)
 let syukkin str =
   let pattern = "[0-9][0-9][0-9][0-9]" |> Str.regexp in
   if not (Str.string_match pattern str 0) then (
@@ -34,6 +32,7 @@ let () =
     printf "COMMAND [4digits]\n";
     exit 1
   );
+  (* TODO: APIで始業時間を取得 *)
   let syukkin_time = syukkin Sys.argv.(1) |> seconds_from_zero_o_clock in
   let now_time = now |> seconds_from_zero_o_clock in
   printf "%s\n" @@ string_of_seconds (now_time - syukkin_time - working_seconds)
