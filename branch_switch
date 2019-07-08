@@ -3,10 +3,17 @@
 
 git fetch
 dest_branch="$(git branch -a | fzf)"
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
 dest_branch="${dest_branch//\ /}"
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 if [ -z "${dest_branch}" ]; then
-  exit 1
+  exit 2
 fi
 
 if [[ "${dest_branch}" =~ \* ]]; then
