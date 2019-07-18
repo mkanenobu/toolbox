@@ -75,6 +75,7 @@ case "${file_extension}" in
   "nim" ) compiler="nim"; compile_argument="c" ;;
   "pas" ) compiler="fpc" \
     middle_file_extensions="o" ;;
+  "kt"  ) compiler="kotlinc" ;;
   "zig" ) compiler="zig"; compile_argument="build-exe"  ;;
   "scm" ) compiler="csc" ;;
   "rkt" ) compiler="raco"; compile_argument="exe" ;;

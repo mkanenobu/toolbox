@@ -1,13 +1,14 @@
-open Printf
+open Core
 
-let seconds_from_zero_o_clock (hour, minute) =
+let from_start_today (hour, minute) =
   hour * 3600 + minute * 60
 
 let string_of_seconds seconds =
-  if abs seconds < 3600 then
-    sprintf "%d minutes" (seconds / 60)
-  else
-    sprintf "%d hours, %d minutes" (seconds / 3600) (seconds mod 3600 / 60)
+  let minutes = sprintf "%d minutes" @@ seconds mod 3600 / 60 in
+  let hour = if abs seconds > 3600
+    then sprintf "%d hour, " @@ seconds / 3600
+    else "" in
+  hour ^ minutes
 
 let now =
   let now = Unix.localtime @@ Unix.time () in
@@ -33,7 +34,7 @@ let () =
     exit 1
   );
   (* TODO: APIで始業時間を取得 *)
-  let syukkin_time = syukkin Sys.argv.(1) |> seconds_from_zero_o_clock in
-  let now_time = now |> seconds_from_zero_o_clock in
+  let syukkin_time = syukkin Sys.argv.(1) |> from_start_today in
+  let now_time = now |> from_start_today in
   printf "%s\n" @@ string_of_seconds (now_time - syukkin_time - working_seconds)
 
