@@ -1,4 +1,4 @@
-open Core
+open Printf
 
 let from_start_today (hour, minute) =
   hour * 3600 + minute * 60
