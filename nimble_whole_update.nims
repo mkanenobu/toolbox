@@ -14,19 +14,29 @@ if exit_code2 != 0:
   quit 2
 
 let out_lines = splitLines(output2)
-let update_available_packages = out_lines.mapIt(it.split[0])
-                                         .filter(proc(x: string): bool = x != "")
+let installed_packages = out_lines.mapIt(it.split[0])
+                                  .filter(proc(x: string): bool = x != "")
 
-if update_available_packages.len == 0:
+if installed_packages.len == 0:
   echo "Packages are not installed"
   quit 3
 
+# TODO: インストールされているバージョンとremoteに存在するバージョンを比較
+# 新しいバージョンが存在する場合のみupdate
+# let versions = out_lines.mapIt(it.replace("[").replace("]").split("  ", 1)[1].split(", "))
+
+# var needs_update: seq[string] = @[]
+# for package in installed_packages:
+#   echo package
+#   let (version, exit_code) = gorgeEx(&"nimble search {package} --ver | grep -m 1 versions")
+
+
 echo "Update following packages"
-echo "$1" % [update_available_packages.join(", ")]
+echo "$1" % [installed_packages.join(", ")]
 
 var error_count = 0
 
-for package in update_available_packages:
+for package in installed_packages:
   let (_, exit_code) = gorgeEx(fmt"nimble -y install {package}")
   if exit_code != 0:
     echo fmt"Update failed  {package}"
