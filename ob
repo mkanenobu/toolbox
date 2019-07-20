@@ -49,18 +49,18 @@ for e in "$@"; do
 done
 
 installed_lib_list="$(ocamlfind list | cut -d ' ' -f 1)"
-opening_lib="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' | cut -d ' ' -f 2)"
+opening_libs="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' | cut -d ' ' -f 2)"
 pkgs=""
-for lib in ${opening_lib}; do
+for lib in ${opening_libs}; do
   if [ -n "$(echo "${installed_lib_list}" | grep "${lib,}")" ]; then
-    pkgs="${lib,} ${pkgs}"
+    pkgs="-pkg ${lib,} ${pkgs}"
   fi
 done
 
 # build
 cd "${path}" && ocamlbuild \
   -use-ocamlfind \
-  -r -pkg "${pkgs}" -lib str \
+  -r ${pkgs} -lib str \
   -tag thread -tag native \
   ${options} "${filename_wo_ext}.native"
 
