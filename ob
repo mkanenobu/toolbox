@@ -48,11 +48,12 @@ for e in "$@"; do
   counter=$((counter + 1))
 done
 
+# resolve dependencies
 installed_lib_list="$(ocamlfind list | cut -d ' ' -f 1)"
-opening_libs="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' | cut -d ' ' -f 2)"
+opening_libs="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' -e 's/_/-/g' | cut -d ' ' -f 2)"
 pkgs=""
 for lib in ${opening_libs}; do
-  if [ -n "$(echo "${installed_lib_list}" | grep "${lib,}")" ]; then
+  if [ -n "$(echo "${installed_lib_list}" | grep -e "^${lib,}$")" ]; then
     pkgs="-pkg ${lib,} ${pkgs}"
   fi
 done
