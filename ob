@@ -49,8 +49,9 @@ for e in "$@"; do
 done
 
 # resolve dependencies
+# TODO: モジュール名は snake case だがパッケージの名前は kebab case のものが存在する
 installed_lib_list="$(ocamlfind list | cut -d ' ' -f 1)"
-opening_libs="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' -e 's/_/-/g' | cut -d ' ' -f 2)"
+opening_libs="$(cat "${filename}" | grep -e '^open *' | sed -e 's/;;//g' | cut -d ' ' -f 2)"
 pkgs=""
 for lib in ${opening_libs}; do
   if [ -n "$(echo "${installed_lib_list}" | grep -e "^${lib,}$")" ]; then
