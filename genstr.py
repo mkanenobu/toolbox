@@ -64,6 +64,12 @@ def parse_args(printable_chars_dict):
         args.remove("-y")
         return printable_chars_dict
 
+    # hiragana only
+    if "--hiragana" in args:
+        printable_chars_dict = {"hiragana": [chr(i) for i in range(ord('ぁ'), ord('ん'))]}
+        args.remove("--hiragana")
+        return printable_chars_dict
+
     # japanese only
     if "-j" in args:
         printable_chars_dict = {
