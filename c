@@ -90,7 +90,8 @@ if [ "${compiler_not_found}" == "true" ]; then
 fi
 
 if [ -n "${compiler}" ]; then
-  eval "${compiler} ${compile_argument} ${options} ${source_file}"
+  exec_command="${compiler} ${compile_argument} ${options} ${source_file}"
+  eval "${exec_command}"
 fi
 
 if [ -e "${filename_without_extension}.o" ]; then
