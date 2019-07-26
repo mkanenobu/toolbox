@@ -1,7 +1,10 @@
 open Core
 
+let zero_padding s =
+  if String.length s = 1 then "0" ^ s else s
+
 let to_hex rgb_code =
-  sprintf "%X" rgb_code
+  sprintf "%X" rgb_code |> zero_padding
 
 let preprocess s =
   let pattern = Str.regexp @@ Str.quote "," in
