@@ -22,12 +22,6 @@ def dict_flatten(dictionary):
     return ''.join(res)
 
 
-def write_to_clipboard(output):
-    process = subprocess.Popen(
-        'pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
-    process.communicate(output.encode('utf-8'))
-
-
 args = sys.argv[1:]
 
 printable_chars_dict = {
@@ -89,6 +83,7 @@ def parse_args(printable_chars_dict):
     -y  Include symbols
     -h  Show this help
     -j  Japanese only
+    --hiragana Hiragana only
     """)
         sys.exit()
 
@@ -102,4 +97,4 @@ if len(args) > 0:
 generated = generate(dict_flatten(printable_chars_dict), length)
 
 print(generated)
-write_to_clipboard(generated)
+
