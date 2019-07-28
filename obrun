@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Cue
 
 ### ocamlbuild wrapper
 
@@ -8,16 +9,15 @@ if [[ ${1} =~ (|-|--)help  ]]; then
 fi
 
 sourcefile="${!#}"
-filename="$(basename "${sourcefile}")"
-filename_wo_ext="${filename%.*}"
+exec_file="${sourcefile%.*}"
 
 ob -quiet "${@}"
 
-if [ -x "./${filename_wo_ext}" ]; then
-  ./${filename_wo_ext}
+if [ -x "${exec_file}" ]; then
+  ${exec_file}
 fi
 
-if [ -x "./${filename_wo_ext}" ]; then
-  rm "./${filename_wo_ext}"
+if [ -x "${exec_file}" ]; then
+  rm "${exec_file}"
 fi
 

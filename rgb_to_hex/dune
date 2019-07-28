@@ -1,0 +1,4 @@
+(executable
+  (name rgb_to_hex)
+  (libraries core str))
+

@@ -25,7 +25,7 @@ let () =
     try
       Array.filteri Sys.argv ~f:(fun i _ -> i <> 0) |>
       Array.map ~f:(fun e -> int_of_string (preprocess e))
-    with Failure "int_of_string" -> exit_with_message 3 "Argument is not number"
+    with _ -> exit_with_message 3 "Argument is not number"
   in
   validate_args args;
 
