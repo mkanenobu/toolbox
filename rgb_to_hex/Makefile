@@ -9,7 +9,7 @@ install:
 	cp ./_build/default/rgb_to_hex.exe ../rgb-to-hex
 
 uninstall:
-	dune uninstall
+	echo "not impl"
 
 clean:
 	dune clean
