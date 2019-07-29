@@ -9,8 +9,11 @@ let to_hex rgb_code =
   sprintf "%02X" rgb_code
 
 let preprocess s =
-  let pattern = Str.regexp @@ Str.quote "," in
-  Str.global_replace pattern "" s
+  let comma = Str.regexp @@ Str.quote "," in
+  let parenthetis = Str.regexp "(\(|\)" in
+  let whitespace  = Str.regexp @@ Str.quote " " in
+  let remove pattern = Str.global_replace pattern "" in
+  s |> remove comma |> remove parenthetis |> remove whitespace
 
 let validate_args args =
   Array.iter args ~f:(fun arg ->
