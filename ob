@@ -35,6 +35,8 @@ fi
 # options parser
 counter=1
 output_file_flg=0
+# no exec file
+lib_flg=0
 for e in "$@"; do
   if [ "${counter}" -eq "$#" ]; then
     break
@@ -42,6 +44,8 @@ for e in "$@"; do
     output_file_flg=1
   elif [ "${output_file_flg}" -eq 1 ]; then
     excutablename="$e"
+  elif [ "$e" == "-lib" ]; then
+    lib_flg=1
   else
     options="${options} ${e}"
   fi
@@ -66,9 +70,12 @@ cd "${path}" && ocamlbuild \
   -tag thread -tag native \
   ${options} "${filename_wo_ext}.native"
 
+# copy exec file
 if [ "$?" -eq 0 ]; then
-  unlink "${filename_wo_ext}.native" \
-  && cp _build/"${filename_wo_ext}.native" "${excutablename}"
+  unlink "${filename_wo_ext}.native"
+  if [ "$?" -eq 0 ] && [ "$lib_flg" -eq 0 ]; then
+    cp _build/"${filename_wo_ext}.native" "${excutablename}"
+  fi
 else
   # clean if build failed
   ocamlbuild -clean
