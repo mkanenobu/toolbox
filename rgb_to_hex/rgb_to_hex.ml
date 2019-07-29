@@ -28,16 +28,16 @@ let validate_args args =
       if arg < 0 || arg > 255 then exit_with_message 2 "Value is out of range (0 <= n <= 255)"
     )
 
-let () =
-  let raw_args = Array.to_list Sys.argv |> List.tl_exn in
+let main raw_args =
+  let raw_args_ = Array.to_list raw_args |> List.tl_exn in
   let arglen = Array.length Sys.argv - 1 in
   let args = match arglen with
     | 1 -> (
-        match parse_one_arg @@ List.nth_exn raw_args 0 with
+        match parse_one_arg @@ List.nth_exn raw_args_ 0 with
         | Some l_ -> int_list_of_string_list l_
         | _ -> exit_with_message 1 @@ sprintf "rgb-to-hex takes 3 args (%d args given)" arglen
       )
-    | 3 -> int_list_of_string_list raw_args
+    | 3 -> int_list_of_string_list raw_args_
     | _ -> exit_with_message 1 @@ sprintf "rgb-to-hex takes 3 args (%d args given)" arglen
   in
 
@@ -50,4 +50,7 @@ let () =
   match Hashtbl.find color_names (Buffer.contents result) with
   | Some s -> print_endline s;
   | None -> ()
+
+let () =
+  main Sys.argv
 
