@@ -1,5 +1,4 @@
 open Core
-open Colors
 
 let exit_with_message exit_code message =
   print_endline message;
@@ -29,8 +28,8 @@ let validate_args args =
     )
 
 let main raw_args =
-  let raw_args_ = Array.to_list raw_args |> List.tl_exn in
-  let arglen = Array.length Sys.argv - 1 in
+  let raw_args_ = raw_args |> Array.to_list |> List.tl_exn in
+  let arglen = List.length raw_args_ in
   let args = match arglen with
     | 1 -> (
         match parse_one_arg @@ List.nth_exn raw_args_ 0 with
@@ -46,11 +45,12 @@ let main raw_args =
   let result = Buffer.create 7 in
   Buffer.add_char result '#';
   List.iter args ~f:(fun e -> Buffer.add_string result @@ to_hex e);
-  print_endline @@ Buffer.contents result;
-  match Hashtbl.find color_names (Buffer.contents result) with
-  | Some s -> print_endline s;
-  | None -> ()
+  Buffer.contents result, Hashtbl.find Colors.color_names (Buffer.contents result)
 
 let () =
-  main Sys.argv
+  let (color_code, color_name) = main Sys.argv in
+  print_endline color_code;
+  match color_name with
+  | Some x -> print_endline x
+  | None -> ()
 

@@ -11,5 +11,8 @@ install:
 uninstall:
 	echo "not impl"
 
+test:
+	dune runtest
+
 clean:
 	dune clean
