@@ -10,10 +10,11 @@ let to_hex rgb_code =
 
 let preprocess s =
   let comma = Str.regexp @@ Str.quote "," in
-  let parenthetis = Str.regexp "(\(|\)" in
+  let parenthetis_open = Str.regexp @@ Str.quote "(" in
+  let parenthetis_end = Str.regexp @@ Str.quote ")" in
   let whitespace  = Str.regexp @@ Str.quote " " in
   let remove pattern = Str.global_replace pattern "" in
-  s |> remove comma |> remove parenthetis |> remove whitespace
+  s |> remove comma |> remove parenthetis_open |> remove parenthetis_end |> remove whitespace
 
 let validate_args args =
   Array.iter args ~f:(fun arg ->
