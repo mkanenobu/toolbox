@@ -19,7 +19,7 @@ let validate_args args =
 
 let () =
   if Array.length Sys.argv <> 4
-  then exit_with_message 1 (sprintf "rgb-to-hex takes 3 args (%d args given)" @@ Array.length Sys.argv);
+  then exit_with_message 1 (sprintf "rgb-to-hex takes 3 args (%d args given)" @@ Array.length Sys.argv - 1);
 
   let args =
     try

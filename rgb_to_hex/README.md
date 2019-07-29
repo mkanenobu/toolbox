@@ -1,0 +1,6 @@
+
+### installation
+
+```
+make && make install
+```
