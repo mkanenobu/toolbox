@@ -22,7 +22,7 @@ let color_names =
     ("#20B2AA", "LightSeaGreen");
     ("#228B22", "ForestGreen");
     ("#2E8B57", "SeaGreen");
-    ("#2F4F4F", "DarkSlateGray");
+    ("#2F4F4F", "DarkSlateGrey");
     ("#32CD32", "LimeGreen");
     ("#3CB371", "MediumSeaGreen");
     ("#40E0D0", "Turquoise");
@@ -36,11 +36,11 @@ let color_names =
     ("#6495ED", "CornflowerBlue");
     ("#663399", "RebeccaPurple");
     ("#66CDAA", "MediumAquaMarine");
-    ("#696969", "DimGray");
+    ("#696969", "DimGrey");
     ("#6A5ACD", "SlateBlue");
     ("#6B8E23", "OliveDrab");
-    ("#708090", "SlateGray");
-    ("#778899", "LightSlateGray");
+    ("#708090", "SlateGrey");
+    ("#778899", "LightSlateGrey");
     ("#7B68EE", "MediumSlateBlue");
     ("#7CFC00", "LawnGreen");
     ("#7FFF00", "Chartreuse");
@@ -48,7 +48,7 @@ let color_names =
     ("#800000", "Maroon");
     ("#800080", "Purple");
     ("#808000", "Olive");
-    ("#808080", "Gray");
+    ("#808080", "Grey");
     ("#87CEEB", "SkyBlue");
     ("#87CEFA", "LightSkyBlue");
     ("#8A2BE2", "BlueViolet");
@@ -64,7 +64,7 @@ let color_names =
     ("#9ACD32", "YellowGreen");
     ("#A0522D", "Sienna");
     ("#A52A2A", "Brown");
-    ("#A9A9A9", "DarkGray");
+    ("#A9A9A9", "DarkGrey");
     ("#ADD8E6", "LightBlue");
     ("#ADFF2F", "GreenYellow");
     ("#AFEEEE", "PaleTurquoise");
@@ -81,7 +81,7 @@ let color_names =
     ("#CD853F", "Peru");
     ("#D2691E", "Chocolate");
     ("#D2B48C", "Tan");
-    ("#D3D3D3", "LightGray");
+    ("#D3D3D3", "LightGrey");
     ("#D8BFD8", "Thistle");
     ("#DA70D6", "Orchid");
     ("#DAA520", "GoldenRod");
