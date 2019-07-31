@@ -14,7 +14,7 @@ exec_file="${sourcefile%.*}"
 ob -quiet "${@}"
 
 if [ -x "${exec_file}" ]; then
-  ${exec_file}
+  ./${exec_file}
 fi
 
 if [ -x "${exec_file}" ]; then
