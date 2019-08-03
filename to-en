@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if [ $# -eq 0 ]; then
-  gtran -source=ja -target=en -text="$(cat /dev/stdin)"
-else
-  gtran -source=ja -target=en -text="$*"
-fi
