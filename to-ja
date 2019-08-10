@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]; then
+  text="$(cat /dev/stdin)"
+else
+  text="$*"
+fi
+
+trans -target ja "${text}"
+

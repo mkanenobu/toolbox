@@ -9,12 +9,12 @@ if [[ ${1} =~ (|-|--)help  ]]; then
 fi
 
 sourcefile="${!#}"
-exec_file="${sourcefile%.*}"
+exec_file="$(readlink -f ${sourcefile%.*})"
 
 ob -quiet "${@}"
 
 if [ -x "${exec_file}" ]; then
-  ./${exec_file}
+  ${exec_file}
 fi
 
 if [ -x "${exec_file}" ]; then
