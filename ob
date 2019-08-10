@@ -67,7 +67,7 @@ done
 cd "${path}" && ocamlbuild \
   -use-ocamlfind \
   -r ${pkgs} -lib str \
-  -tag thread -tag native \
+  -tag thread -tag native -tag bin_annot \
   ${options} "${filename_wo_ext}.native"
 
 # copy exec file
