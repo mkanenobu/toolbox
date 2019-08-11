@@ -36,62 +36,96 @@ if [ ! -e "${source_file}" ]; then
   exit 1
 fi
 
-sbcl_compiler(){
+sbcl_compiler() {
   echo '(compile-file (nth 1 sb-ext:*posix-argv*))' | sbcl "${source_file}" && \
     chmod +x "$(echo "${source_file}" | sed -e "s/\.\(lisp\|cl\)/\.fasl/")"
 }
 
-# Haskell (exists stask?)
-[ "$(type stack)" ] && compile_argument="ghc --"; haskell_compiler="stack" \
-  || [ "$(type ghc)" ] && haskell_compiler="ghc" \
-  || compiler_not_found="true"
+exists_compiler() {
+  suggested_compilers="$*"
+  for compiler in ${suggested_compilers}; do
+    type "${compiler}" 1>/dev/null 2>/dev/null
+    exists=$?
+    if [ "${exists}" -eq 0 ]; then
+      echo -n "${compiler}"
+      break
+    fi
+  done
+}
 
 # remove when compile finished
 middle_file_extensions=""
 
 case "${file_extension}" in
-  "c"   ) compiler="$( \
-             [ "$(type clang)" ] && "clang" \
-          || [ "$(type gcc)" ] && "gcc" \
-          || "cc")"
-    options="${options} -o ${filename_without_extension}" ;;
-  "cpp" ) compiler="$( \
-             [ "$(type clang++)" ] && "clang++" \
-          || [ "$(type g++)" ] && "g++" \
-          || "c++")"
-    options="${options} -o ${filename_without_extension}" ;;
-  "d"   ) compiler="$( \
-             [ "$(type dmd)" ] && "dmd" \
-          || [ "$(type gdc)" ] && "gdc" \
-          || [ "$(type ldc)" ] && "ldc" \
-          || compiler_not_found="true")";;
-  "go"  ) compiler="go"; compile_argument="build" ;;
-  "rs"  ) compiler="rustc" ;;
-  "hs"  ) compiler="${haskell_compiler}" \
-    middle_file_extensions="hi";;
-  "ml"  ) compiler="ob" ;;
-    # options="${options} -o ${filename_without_extension}" ;;
-    # middle_file_extensions="cmi cmx" ;;
-  "nim" ) compiler="nim"; compile_argument="c" ;;
-  "pas" ) compiler="fpc" \
-    middle_file_extensions="o" ;;
-  "kt"  ) compiler="kotlinc" ;;
-  "zig" ) compiler="zig"; compile_argument="build-exe"  ;;
-  "scm" ) compiler="csc" ;;
-  "rkt" ) compiler="raco"; compile_argument="exe" ;;
-  "ts"  ) compiler="tsc" ;;
-  "cl" | "lisp" ) compiler="sbcl_compiler" ;;
+  "c"   )
+    compiler="$(exists_compiler "clang gcc cc")"
+    options="${options} -o ${filename_without_extension}"
+    ;;
+  "cpp" )
+    compiler="$(exists_compiler "clang++ g++ c++")"
+    options="${options} -o ${filename_without_extension}"
+    ;;
+  "d"   )
+    compiler="$(exists_compiler "dmd gdc ldc")"
+    ;;
+  "go"  )
+    compiler="go"
+    compile_argument="build"
+    ;;
+  "rs"  )
+    compiler="rustc"
+    ;;
+  "hs"  )
+    # exists stask?
+    [ "$(type stack 1>/dev/null 2>/dev/null)" ] && compile_argument="ghc"; haskell_compiler="stack" \
+    || [ "$(type ghc 1>/dev/null 2>/dev/null)" ] && haskell_compiler="ghc"
+
+    if [ -n "${options}" ]; then
+      # give options to ghc (not to stack)
+      compile_argument="${compile_argument} -- "
+    fi
+    compiler="${haskell_compiler}"
+    middle_file_extensions="hi"
+    ;;
+  "ml"  )
+    compiler="ob"
+    # options="${options} -o ${filename_without_extension}"
+    # middle_file_extensions="cmi cmx"
+    ;;
+  "nim" )
+    compiler="nim"
+    compile_argument="c"
+    ;;
+  "pas" )
+    compiler="fpc"
+    middle_file_extensions="o"
+    ;;
+  "kt"  )
+    compiler="kotlinc"
+    ;;
+  "scm" )
+    compiler="csc"
+    ;;
+  "rkt" )
+    compiler="raco"
+    compile_argument="exe"
+    ;;
+  "ts"  )
+    compiler="tsc"
+    ;;
+  "cl" | "lisp" )
+    compiler="sbcl_compiler"
+    ;;
   * ) echo "Filetype is not supported" 1>&2; exit 2 ;;
 esac
 
-if [ "${compiler_not_found}" == "true" ]; then
-  echo "Compiler (${compiler}) is not found"
-  exit 3
-fi
-
 if [ -n "${compiler}" ]; then
   exec_command="${compiler} ${compile_argument} ${options} ${source_file}"
+  echo "${exec_command}"
   eval "${exec_command}"
+else
+  echo "Compiler not found"
+  exit 3
 fi
 
 if [ -e "${filename_without_extension}.o" ]; then
