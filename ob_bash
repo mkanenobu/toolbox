@@ -53,8 +53,8 @@ for e in "$@"; do
 done
 
 # resolve dependencies
-# TODO: モジュール名は snake case だがパッケージの名前は kebab case のものが存在する
-# TODO: openされていないが使用されているモジュールをリンク
+# FIXME: モジュール名は snake case だがパッケージの名前は kebab case のものが存在する
+# TODO: openされていないが使用されているモジュールをリンクするように
 installed_lib_list="$(ocamlfind list | cut -d ' ' -f 1)"
 opening_libs="$(cat "${sourcefile}" 2>/dev/null | grep -e '^open *' | sed -e 's/;;//g' | cut -d ' ' -f 2)"
 pkgs=""
