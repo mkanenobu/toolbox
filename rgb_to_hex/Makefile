@@ -1,4 +1,4 @@
-.PHONY: default build install uninstall test clean
+.PHONY: default build install clean
 
 default: build
 
@@ -7,12 +7,6 @@ build:
 
 install:
 	cp ./_build/default/rgb_to_hex.exe ../rgb-to-hex
-
-uninstall:
-	echo "not impl"
-
-test:
-	dune runtest
 
 clean:
 	dune clean
