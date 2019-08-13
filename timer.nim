@@ -7,7 +7,6 @@ var
   display_time:string
   remain_minutes, remain_seconds, remain_hours:string
   keys:seq[string] = @[]
-  sound:string
 
 # Ctrl-C handle
 type
@@ -26,7 +25,6 @@ for kind, key, val in getopt():
   of cmdLongOption, cmdShortOption:
     keys.add(key)
   of cmdEnd: discard
-  else: discard
 
 for options in keys:
   case options
@@ -52,7 +50,7 @@ proc timer() =
       if len($remain_hours) == 1:
         remain_hours = "0" & remain_hours
       display_time = fmt"{remain_hours}:{remain_minutes}:{remain_seconds}"
-      flushFile(stdout)
+      stdout.flushFile
       stdout.write("\r" & "      ")
       stdout.write("\r" & display_time)
       sleep 1000
