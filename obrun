@@ -11,7 +11,7 @@ fi
 sourcefile="${!#}"
 exec_file="$(readlink -f ${sourcefile%.*})"
 
-ob -quiet "${@}"
+ob_bash -quiet "${@}"
 
 if [ -x "${exec_file}" ]; then
   ${exec_file}

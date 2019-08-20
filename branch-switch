@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
+
+set -Ceu
 {
 
-git fetch
-dest_branch="$(git branch -a | fzf)"
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+git fetch --prune
 
+dest_branch="$(git branch -a | fzf)"
 dest_branch="${dest_branch//\ /}"
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
 if [ -z "${dest_branch}" ]; then
   exit 2
