@@ -73,8 +73,7 @@ cd "${path}" && ocamlbuild \
 
 # copy exec file
 if [ "$?" -eq 0 ]; then
-  unlink "${filename_wo_ext}.native"
-  if [ "$?" -eq 0 ] && [ "$lib_flg" -eq 0 ]; then
+  if unlink "${filename_wo_ext}.native" && [ "$lib_flg" -eq 0 ]; then
     cp _build/"${filename_wo_ext}.native" "${excutablename}"
   fi
 else

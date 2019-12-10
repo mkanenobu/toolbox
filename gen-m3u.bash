@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-generate_file=$(basename "$(pwd)" | sed -e "s/\$/.m3u/g")
+generate_file="$(basename "$(pwd)" | sed -e "s/\$/.m3u/g")"
 
 if [ -e "${generate_file}" ]; then
   exit 1
