@@ -9,6 +9,7 @@ let preprocess s =
   let remove pattern = Str.global_replace pattern "" in
   s |> remove pattern
 
+(* expect quoted string separated by space like '255 255 255' *)
 let parse_one_arg arg =
   try
     Some (String.split arg ~on:(' ') |> List.map ~f:(fun e -> preprocess e))
