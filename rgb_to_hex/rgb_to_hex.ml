@@ -48,7 +48,7 @@ let main raw_args =
   Buffer.contents result, Hashtbl.find Colors.color_names (Buffer.contents result)
 
 let () =
-  let (color_code, color_name) = main Sys.argv in
+  let (color_code, color_name) = main @@ Sys.get_argv () in
   print_endline color_code;
   match color_name with
   | Some x -> print_endline x
