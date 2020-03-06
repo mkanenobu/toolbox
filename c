@@ -88,7 +88,7 @@ case "${file_extension}" in
     middle_file_extensions="hi"
     ;;
   "ml"  )
-    compiler="ob_bash"
+    compiler="ob"
     # options="${options} -o ${filename_without_extension}"
     # middle_file_extensions="cmi cmx"
     ;;
