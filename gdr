@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# git diff from branch root
+
+base_commit="$(git merge-base develop HEAD)"
+
+git diff "${base_commit}"
