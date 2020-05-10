@@ -67,7 +67,7 @@ done
 # build
 cd "${path}" && ocamlbuild \
   -use-ocamlfind \
-  -r ${pkgs} -lib str \
+  -r ${pkgs} -pkg core -pkg ppx_deriving.show -lib str \
   -tag thread -tag native -tag bin_annot \
   ${options} "${filename_wo_ext}.native"
 
