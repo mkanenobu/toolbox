@@ -1,30 +1,24 @@
 open Printf
 
 let help =
-  (Str.global_replace (Str.regexp @@ Str.quote ".ml") "" __FILE__) ^ " [ARG1] [ARG2]\n"
+  Str.global_replace (Str.regexp @@ Str.quote ".ml") "" __FILE__ ^ " [ARG1] [ARG2]\n"
 ;;
 
 let exit_with_help n =
   print_string help;
-  exit n;
+  exit n
 ;;
 
 let gcd a b =
-  let rec iter a_ b_ =
-    if b_ = 0 then a_
-    else iter b_ (a_ mod b_)
-  in
+  let rec iter a_ b_ = if b_ = 0 then a_ else iter b_ (a_ mod b_) in
   iter a b
 ;;
 
-let divide_by_gcd a b gcd_ =
-  if min a b = 0 then (a, b)
-  else (a / gcd_), (b / gcd_)
-;;
+let divide_by_gcd a b gcd_ = if min a b = 0 then a, b else a / gcd_, b / gcd_
 
 let parse_arg arg =
-  try int_of_string arg
-  with _ -> exit_with_help 2
+  try int_of_string arg with
+  | _ -> exit_with_help 2
 ;;
 
 let () =
@@ -34,4 +28,4 @@ let () =
   let divisor = gcd arg1 arg2 in
   let a, b = divide_by_gcd arg1 arg2 divisor in
   printf "%.1f x %.1f\n" (float a) (float b)
-
+;;
