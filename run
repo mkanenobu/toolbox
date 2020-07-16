@@ -38,7 +38,7 @@ runner=""
   || cpp_compiler="c++"
 
 # Scheme
-[ "$(which scheme)" ] && scheme_runner="scheme --quiet < " \
+[ "$(which csi)" ] && scheme_runner="csi -s " \
   || [ "$(which gosh)" ] && scheme_runner="gosh" \
 
 lisp_runner="sbcl --script"
