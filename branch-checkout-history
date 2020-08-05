@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+git --no-pager reflog | awk '$3 == "checkout:" && /moving from/ {print $8}' | uniq | tac
+
