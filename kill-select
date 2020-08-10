@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+lines="$(ps aux | sed 1d  | sed '/^root/d' | tr -s ' ' | cut --fields='2,11-' -d ' ')"
+pid="$(echo "${lines}" | fzf | sed 's/^[ \t]*//' | cut -f 1 -d ' ')"
+
+if [ -z "${pid}" ]; then
+  exit 1
+fi
+kill -9 "${pid}"
