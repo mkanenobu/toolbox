@@ -14,7 +14,7 @@ if [ -z "${dest_branch}" ]; then
 fi
 
 if [[ "${dest_branch}" =~ \* ]]; then
-  echo "Already in the branch"
+  echo "Already in dest branch"
   exit 1
 fi
 
