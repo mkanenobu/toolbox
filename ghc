@@ -1,6 +1,0 @@
-#!/bin/bash
-
-stack ghc "$1"
-filename="$(echo "$1" | sed -e 's/\.[^\.]*$//')"
-rm -f "${filename}.hi"
-rm -f "${filename}.o"
