@@ -1,8 +1,23 @@
 #!/bin/bash
 
+set -Ce
+
 if [ $# -eq 0 ]; then
   exit 1
 fi
+
+input=""
+if [ "$1" == "--stdin" ]; then
+  input="$(pbpaste)"
+  shift
+fi
+
 source_file="$1"
-nim c -r --verbosity:0 "$source_file"
-rm "${source_file/.nim/}"
+
+if [ -n "${input}" ]; then
+  echo "${input}" | nim c --run --verbosity:0 -d:ssl "$source_file"
+else
+  nim c --run --verbosity:0 -d:ssl "$source_file"
+fi
+
+rm -f "${source_file/.nim/}"
