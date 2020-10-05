@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nkf --guess "${1}"
