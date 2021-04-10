@@ -1,6 +1,11 @@
+Install deps
 
-### installation
-
+```sh
+opam install .
 ```
-make && make install
+
+Build
+
+```sh
+make
 ```

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+change_to="$(git rev-parse --abbrev-ref HEAD | vipe.bash)"
+git branch -m "${change_to}"
