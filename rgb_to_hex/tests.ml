@@ -8,6 +8,7 @@ let assert_code (input: string array) (result: string) =
   assert (code = result)
 
 let _ =
+  print_endline "Start test.";
   let black = [|"0"; "0"; "0"|] in
   assert_equal black ("#000000", Some "Black");
 

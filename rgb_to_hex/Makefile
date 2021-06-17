@@ -1,6 +1,9 @@
-.PHONY: default build install clean
+.PHONY: default install_deps build install clean
 
 default: build
+
+install_deps:
+	dune install
 
 build:
 	dune build rgb_to_hex.exe
