@@ -1,0 +1,13 @@
+{
+  "name": "yaml_to_json",
+  "version": "0.1.0",
+  "description": "Read YAML and print JSON",
+  "scripts": {
+    "exec": "deno run --unstable --allow-read index.ts",
+    "build": "deno compile --unstable  --allow-read index.ts",
+    "fmt": "deno fmt",
+    "install": "npm run build && cp yaml_to_json ../yaml-to-json"
+  },
+  "author": "mkanenobu",
+  "license": "MIT"
+}
