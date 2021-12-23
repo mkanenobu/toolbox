@@ -3,7 +3,7 @@
 exec julia --color=yes --startup-file=no -e 'include(popfirst!(ARGS))' \
     "${BASH_SOURCE[0]}" "$@"
 =#
-using Pkg
+import Pkg
 
 args = ARGS
 
