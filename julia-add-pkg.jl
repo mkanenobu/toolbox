@@ -1,4 +1,8 @@
-#!/usr/bin/env -S julia --project
+#!/bin/bash
+#=
+exec julia --color=yes --startup-file=no -e 'include(popfirst!(ARGS))' \
+    "${BASH_SOURCE[0]}" "$@"
+=#
 using Pkg
 
 args = ARGS
