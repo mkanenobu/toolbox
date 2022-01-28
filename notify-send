@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [ "$(uname)" == "Darwin" ]; then
-  if type "osascript" 1>/dev/null 2>/dev/null ; then
-    osascript -e "display notification $@"
-  fi
-fi
