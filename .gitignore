@@ -18,4 +18,5 @@ current_time
 uuid
 color
 abspath
-yaml-to-json
+yaml_to_json
+ping-checker
