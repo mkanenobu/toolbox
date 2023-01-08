@@ -1,19 +1,8 @@
-nimcache
-
-.merlin
-_build
-*cache*
-
 # binary
 a.out
-nimre
-git_autofetch
-timer
 ratio
-available_fonts
-zangyo_time
-rgb-to-hex
 word-shortener
+<<<<<<< HEAD
 current_time
 uuid
 color

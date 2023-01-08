@@ -1,5 +1,0 @@
-#!/bin/bash
-
-if [ -x gforth ]; then
-  gforth "$1" -e bye
-fi

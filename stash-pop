@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ "${1}" = "show" ]; then
-  git stash list -p
-  exit
-fi
-
-target_stash="$(git stash list | peco | cut -d ":" -f 1)"
-git stash pop "${target_stash}"
