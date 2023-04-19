@@ -1,0 +1,7 @@
+[tasks.build]
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.install]
+command = "install"
+args = ["target/release/uuid_v4", "../uuid-v4"]
