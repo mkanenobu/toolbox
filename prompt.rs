@@ -16,7 +16,7 @@ fn main() {
     let first_half = format!("{}:{}", datetime, working_dir);
     let error_prompt = if_error();
 
-    let prompt = format!("{first_half}\\[$({error_prompt}) ");
+    let prompt = format!("{first_half}$({error_prompt}) ");
     let mut stdout = io::stdout();
     stdout.write(prompt.as_bytes()).unwrap();
     stdout.flush().unwrap();
