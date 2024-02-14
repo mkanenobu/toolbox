@@ -9,3 +9,4 @@ abspath
 yaml_to_json
 ping-checker
 uuid-v4
+random-bytes
