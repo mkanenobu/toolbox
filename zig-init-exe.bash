@@ -10,13 +10,13 @@ EOF
 
 touch Makefile
 cat > Makefile <<EOF
-.PHONY: build, run, test, format, clean
-
-build:
-	@zig build
+.PHONY: run, build, test, format, clean
 
 run:
 	@zig build run
+
+build:
+	@zig build
 
 test:
 	@zig test src/*.zig
