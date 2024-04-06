@@ -19,7 +19,7 @@ build:
 	@zig build
 
 test:
-	@zig test src/*.zig
+	@zig test src/main.zig
 
 format:
 	@zig fmt **/*.zig
