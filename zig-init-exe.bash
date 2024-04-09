@@ -28,7 +28,8 @@ clean:
 	@rm -rf zig-cache zig-out
 EOF
 
-cat > src/main.zig <<EOF
+cat >> src/main.zig <<EOF
+
 comptime {
     std.testing.refAllDecls(@This());
 }
