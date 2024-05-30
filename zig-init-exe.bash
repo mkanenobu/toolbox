@@ -10,20 +10,23 @@ EOF
 
 touch Makefile
 cat > Makefile <<EOF
-.PHONY: run, build, test, format, clean
-
+.PHONY: run
 run:
 	@zig build run
 
+.PHONY: build
 build:
 	@zig build
 
+.PHONY: test
 test:
 	@zig test src/main.zig
 
-format:
+.PHONY: fmt
+fmt:
 	@zig fmt **/*.zig
 
+.PHONY: clean
 clean:
 	@rm -rf zig-cache zig-out
 EOF
