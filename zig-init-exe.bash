@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-zig init-exe
+zig init
 
 touch .gitignore
 cat > .gitignore <<EOF
