@@ -15,7 +15,7 @@ fn main() {
                             Err(e) => eprintln!("Failed to pretty print JSON: {}", e),
                         }
                     }
-                    Err(e) => eprintln!("Failed to parse JSON: {}", e),
+                    Err(_) => println!("{}", &log_line),
                 }
             }
             Err(e) => eprintln!("Error reading line: {}", e),
