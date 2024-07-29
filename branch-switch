@@ -6,24 +6,9 @@ set -Ceu
 
 # git fetch --prune
 
-dest_branch="$(git branch -a | fzf)"
-dest_branch="${dest_branch//\ /}"
+branches=$(git --no-pager reflog | awk '$3 == "checkout:" && /moving from/ {print $8}')
+dest_branch="$(echo "${branches}" | fzf)"
 
-if [ -z "${dest_branch}" ]; then
-  exit 2
-fi
-
-if [[ "${dest_branch}" =~ \* ]]; then
-  echo "Already in dest branch"
-  exit 1
-fi
-
-echo "Checkout to ${dest_branch}"
-
-if [[ "${dest_branch}" =~ remotes ]]; then
-  git checkout -b "${dest_branch//remotes\/origin\//}" "${dest_branch//remotes\//}"
-else
-  git checkout "${dest_branch}"
-fi
+git checkout "${dest_branch}"
 
 }

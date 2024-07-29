@@ -12,7 +12,7 @@ fn main() {
                     Ok(json_value) => {
                         match serde_json::to_string_pretty(&json_value) {
                             Ok(pretty_json) => println!("{}", pretty_json),
-                            Err(e) => eprintln!("Failed to pretty print JSON: {}", e),
+                            Err(err) => println!("Failed to pretty print JSON: {}", err),
                         }
                     }
                     Err(_) => println!("{}", &log_line),
