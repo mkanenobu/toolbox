@@ -4,7 +4,7 @@ zig init
 
 touch .gitignore
 cat > .gitignore <<EOF
-/zig-cache
+/.zig-cache
 /zig-out
 EOF
 
@@ -28,13 +28,5 @@ fmt:
 
 .PHONY: clean
 clean:
-	@rm -rf zig-cache zig-out
+	@rm -rf .zig-cache zig-out
 EOF
-
-cat >> src/main.zig <<EOF
-
-comptime {
-    std.testing.refAllDecls(@This());
-}
-EOF
-
