@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -Ceu
+
 zig init
 
 touch .gitignore
