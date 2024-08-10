@@ -4,13 +4,11 @@ set -Ceu
 
 zig init
 
-touch .gitignore
 cat > .gitignore <<EOF
 /.zig-cache
 /zig-out
 EOF
 
-touch Makefile
 cat > Makefile <<EOF
 .PHONY: run
 run:
@@ -32,3 +30,5 @@ fmt:
 clean:
 	@rm -rf .zig-cache zig-out
 EOF
+
+git init
