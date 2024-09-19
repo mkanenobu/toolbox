@@ -5,7 +5,6 @@ word-shortener
 current_time
 uuid
 color
-abspath
 yaml_to_json
 ping-checker
 uuid-v4
