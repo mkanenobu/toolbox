@@ -15,6 +15,7 @@ pub fn get_abspath(cwd: path::PathBuf, subpath: &str, follow_symlink: bool) -> R
     }
 }
 
+// ref: https://github.com/rust-lang/cargo/blob/fede83ccf973457de319ba6fa0e36ead454d2e20/src/cargo/util/paths.rs#L61
 fn normalize_path(path: &path::Path) -> path::PathBuf {
     let mut components = path.components().peekable();
     let mut ret = if let Some(c @ path::Component::Prefix(..)) = components.peek().cloned() {
