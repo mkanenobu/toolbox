@@ -6,6 +6,10 @@ build:
 run:
 	cargo run
 
+.PHONY: fmt
+fmt:
+	cargo fmt
+
 .PHONY: install
 install:
 	cargo install --path .
