@@ -5,7 +5,6 @@ word-shortener
 current_time
 uuid
 color
-yaml_to_json
 ping-checker
 uuid-v4
 random-bytes
