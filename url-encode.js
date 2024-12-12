@@ -1,14 +1,14 @@
-#!/usr/bin/env -S deno run
+#!/usr/bin/env bun
 
-let str = Deno.args[0];
+let str = Bun.argv[2];
+
+// try to read stdin if no args
 if (!str || str.length === 0) {
-  const decoder = new TextDecoder();
   let buf = "";
-  for await (const chunk of Deno.stdin.readable) {
-    buf += decoder.decode(chunk);
+  for await (const chunk of Bun.stdin.stream()) {
+    buf += Buffer.from(chunk).toString();
   }
   str = buf;
-
 }
 
 console.log(encodeURIComponent(str))
