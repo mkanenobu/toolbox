@@ -44,7 +44,7 @@ end
 
 input = get_input
 input.each do |num|
-  n = num.to_f
-  puts "#{sprintf("%.1e", n)} #{approximate_japanese_number n}"
+  n = eval(num).to_f
+  puts "#{approximate_japanese_number n}\n#{sprintf("%.1e", n)} "
 end
 
