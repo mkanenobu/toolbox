@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const process = require("node:process");
-const childProcess  = require("node:child_process");
+import process from "node:process";
+import childProcess  from "node:child_process";
 
 const readStdin = async () => {
   let buf = "";
