@@ -11,5 +11,9 @@ if (!str || str.length === 0) {
   str = buf;
 }
 
-console.log(decodeURIComponent(str))
+const print = (s) => {
+  const nl = process.stdout.isTTY ? "\n" : "";
+  process.stdout.write(s + nl);
+}
 
+print(decodeURIComponent(str));
