@@ -15,7 +15,7 @@ pub fn main() !void {
     var list = std.ArrayList(u8).init(allocator);
     defer list.deinit();
 
-    var stdin = std.io.getStdIn().reader();
+    var stdin = io.getStdIn().reader();
     var buf: [1024]u8 = undefined;
     while (true) {
         const n = try stdin.read(&buf);
@@ -25,18 +25,19 @@ pub fn main() !void {
         try list.appendSlice(buf[0..n]);
     }
 
-    const trimmed = trim(list.items, &ascii.whitespace);
-    const stdout = std.io.getStdOut().writer();
+    const trimmed = trim_whitespace(list.items);
+    const stdout = io.getStdOut().writer();
     _ = try stdout.write(trimmed);
 }
 
-fn trim(s: []const u8, cutset: []const u8) []const u8 {
-    return mem.trim(u8, s, cutset);
+fn trim_whitespace(s: []const u8) []const u8 {
+    return mem.trim(u8, s, &ascii.whitespace);
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+test "trim_whitespace" {
+    const input = "\t  hello, world!\r\n  ";
+    const expected = "hello, world!";
+    const actual = trim_whitespace(input);
+
+    try std.testing.expectEqualDeep(expected, actual);
 }
