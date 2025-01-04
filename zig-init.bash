@@ -29,6 +29,19 @@ fmt:
 .PHONY: clean
 clean:
 	@rm -rf .zig-cache zig-out
+
 EOF
 
-git init
+cat > .editorconfig <<EOF
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.zig]
+indent_style = space
+indent_size = 4
+
+EOF
+
