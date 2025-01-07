@@ -20,11 +20,12 @@ build:
 
 .PHONY: test
 test:
-	@zig test src/main.zig
+	@zig test src/main.zig 2>&1 | cat
+	@zig test src/root.zig 2>&1 | cat
 
 .PHONY: fmt
 fmt:
-	@zig fmt **/*.zig
+	@zig fmt \$\$(find . -name "*.zig")
 
 .PHONY: clean
 clean:
@@ -43,5 +44,19 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 
+EOF
+
+cat >> src/main.zig <<EOF
+
+test {
+    std.testing.refAllDecls(@This());
+}
+EOF
+
+cat >> src/root.zig <<EOF
+
+test {
+    std.testing.refAllDecls(@This());
+}
 EOF
 

@@ -1,0 +1,4 @@
+# wct
+
+word-count
+
