@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import process from "node:process";
-import childProcess  from "node:child_process";
+const process = require("node:process");
+const childProcess = require("node:child_process");
 
 const readStdin = async () => {
   let buf = "";
@@ -32,3 +32,4 @@ const main = async () => {
   console.log(trimmed);
 };
 main();
+
