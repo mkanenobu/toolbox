@@ -5,8 +5,8 @@ set -Ceu
 zig init
 
 cat > .gitignore <<EOF
-.zig-cache
-zig-out
+.zig-cache/
+zig-out/
 EOF
 
 cat > Makefile <<EOF
