@@ -49,14 +49,14 @@ EOF
 cat >> src/main.zig <<EOF
 
 test {
-    std.testing.refAllDecls(@This());
+    std.testing.refAllDeclsRecursive(@This());
 }
 EOF
 
 cat >> src/root.zig <<EOF
 
 test {
-    std.testing.refAllDecls(@This());
+    std.testing.refAllDeclsRecursive(@This());
 }
 EOF
 

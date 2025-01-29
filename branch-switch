@@ -4,10 +4,9 @@ set -Ceu
 
 {
 
-# git fetch --prune
-
 branches=$(git --no-pager reflog | awk '$3 == "checkout:" && /moving from/ {print $8}')
-dest_branch="$(echo "${branches}" | fzf)"
+# awk ... is deduplication
+dest_branch="$(echo "${branches}" | awk '!seen[$0]++' | fzf)"
 
 git checkout "${dest_branch}"
 

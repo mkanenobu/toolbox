@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-target_branches="$(git fetch -p ; git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}')"
+set -Ceu
+
+git fetch --prune 2>&1 >/dev/null
+target_branches="$(git branch --remotes | awk '{print $1}' | egrep --invert-match --file /dev/fd/0 <(git branch -vv | grep origin | grep --invert-match '*') | awk '{print $1}')"
 
 if [ -z "${target_branches}" ]; then
   echo "No branches to delete."
@@ -16,5 +19,5 @@ case "$yn" in
   *) exit 0;;
 esac
 
-echo ${target_branches} | xargs git branch -D
+echo ${target_branches} | xargs git branch --delete --force
 
