@@ -9,7 +9,7 @@ set -Ceu
 os="macos"
 arch="aarch64"
 
-master="$(curl https://ziglang.org/download/index.json | jq -r '.master')"
+master="$(curl --silent https://ziglang.org/download/index.json | jq -r '.master')"
 macos="$(echo "${master}" | jq -r ".[\"${arch}-${os}\"]")"
 master_version="$(echo "${master}" | jq -r '.version')"
 tarball_url="$(echo "${macos}" | jq -r '.tarball')"
@@ -23,6 +23,8 @@ zig_symlink_path="${HOME}/.local/bin/zig"
 zls_symlink_path="${HOME}/.local/bin/zls"
 
 function install_zig() {
+  echo "Installing zig..."
+
   if [ -e "${zig_install_dir}/${master_version}/zig" ]; then
     echo "Latest zig compiler is already installed"
     return
@@ -46,6 +48,8 @@ function install_zig() {
 
 # Install zls
 function install_zls() {
+  echo "Install zls..."
+
   rm -rf "${tmpdir}/zls"
   git clone https://github.com/zigtools/zls "${tmpdir}/zls"
   cd "${tmpdir}/zls"
