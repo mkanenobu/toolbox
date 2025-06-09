@@ -10,6 +10,11 @@ zig-out/
 EOF
 
 cat > Makefile <<EOF
+.DEFAULT_GOAL := all
+
+.PHONY: all
+all: build
+
 .PHONY: run
 run:
 	@zig build run
