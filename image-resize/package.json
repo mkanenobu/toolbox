@@ -1,0 +1,21 @@
+{
+  "name": "resize-image",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "exec": "bun run index.ts",
+    "build": "bun build index.ts --compile --outfile resize-image",
+    "install": "bun run build && mv resize-image ~/.local/bin"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}
