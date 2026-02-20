@@ -17,7 +17,7 @@ const main = async () => {
 
   const cmd = `
 sleep ${WAIT_MINUTES * 60}
-osascript -e 'display notification "${escape(message)}" with title "Reminder"'
+osascript -e 'display dialog "${escape(message)}" buttons {"OK"} default button 1'
 `.trim();
 
   spawn("sh", ["-c", cmd], {
